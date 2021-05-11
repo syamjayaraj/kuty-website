@@ -124,6 +124,16 @@ export default function Home(props) {
   return (
     <div className={classes.root}>
       <Helmet>
+        <meta charset="utf-8" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+
         <title>
           URL Shortener - Paste your lengthy URL and shorten it | Kuty.me
         </title>
