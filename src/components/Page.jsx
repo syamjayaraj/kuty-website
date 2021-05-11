@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "../config";
 import Loader from "react-loader-spinner";
 import Typography from "@material-ui/core/Typography";
+import { Helmet } from "react-helmet";
 
 function Page(props) {
   const [loading, setLoading] = useState(false);
+  const [urlData, setUrlData] = useState({});
+
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -26,6 +29,7 @@ function Page(props) {
       .then((res) => res.json())
       .then((res) => {
         if (res.data) {
+          setUrlData(res.data);
           window.location.replace(res.data.url);
         } else {
           setMessage(res.message);
@@ -41,6 +45,13 @@ function Page(props) {
         marginTop: "45vh",
       }}
     >
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{urlData.title}</title>
+        <link rel="icon" href={urlData.icon} />
+        <meta name="description" content={urlData.description} />
+      </Helmet>
+
       {loading ? (
         <Loader
           type="Puff"

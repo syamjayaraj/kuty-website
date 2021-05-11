@@ -10,8 +10,10 @@ import {
   Input,
   IconButton,
   Typography,
+  FormHelperText,
 } from "@material-ui/core";
 import { FileCopy } from "@material-ui/icons";
+import isURL from "validator/lib/isURL";
 
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { apiUrl, siteUrl } from "../config";
@@ -19,6 +21,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import Radium, { StyleRoot } from "radium";
+import { Helmet } from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -63,28 +66,39 @@ export default function Home(props) {
   const [shortening, setShortening] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
+  const [message, setMessage] = useState({
+    title: "",
+    type: "",
+  });
 
   let shortenUrl = (e) => {
     e.preventDefault();
-    setShortening(true);
-    setShortenedUrl("");
-    setCopyButtonClicked(false);
-    let url = `${apiUrl}/url/shorten`;
-    let requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: urlToShorten }),
-    };
-    fetch(url, requestOptions)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          setShortenedUrl(res.data.shortenedUrl);
-        }
-        setShortening(false);
+    if (isURL(urlToShorten)) {
+      setShortening(true);
+      setShortenedUrl("");
+      setCopyButtonClicked(false);
+      let url = `${apiUrl}/url/shorten`;
+      let requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: urlToShorten }),
+      };
+      fetch(url, requestOptions)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.data) {
+            setShortenedUrl(res.data.shortenedUrl);
+          }
+          setShortening(false);
+        });
+    } else {
+      setMessage({
+        title: "Unable to shorten that link. It is not a valid url.",
+        type: "invalid",
       });
+    }
   };
 
   function copyShortenedUrl() {
@@ -92,8 +106,36 @@ export default function Home(props) {
     setCopyButtonClicked(true);
   }
 
+  let validateAndSetUrlToShorten = (url) => {
+    if (isURL(url)) {
+      setMessage({
+        title: "Great! It is a valid url.",
+        type: "valid",
+      });
+    } else {
+      setMessage({
+        title: "",
+        type: "",
+      });
+    }
+    setUrlToShorten(url);
+  };
+
   return (
     <div className={classes.root}>
+      <Helmet>
+        <title>
+          URL Shortener - Paste your lengthy URL and shorten it | Kuty.me
+        </title>
+        <link rel="icon" href="/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="description"
+          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated. The short URL will redirect to the lengthy URL you pasted."
+        />
+      </Helmet>
+
       <Container component="main" className={classes.main} maxWidth="sm">
         <img src="/assets/images/kuty_logo.png" className={classes.logo} />
         <form
@@ -109,9 +151,19 @@ export default function Home(props) {
               label="Paste your URL here"
               value={urlToShorten}
               pattern="https://.*"
-              onChange={(e) => setUrlToShorten(e.target.value)}
+              onChange={(e) => validateAndSetUrlToShorten(e.target.value)}
             />
           </FormControl>
+          {message.title ? (
+            <FormHelperText
+              style={
+                message.type == "valid" ? { color: "green" } : { color: "red" }
+              }
+              id="component-error-text"
+            >
+              {message.title}
+            </FormHelperText>
+          ) : null}
 
           <div className={classes.arrowContainer}>
             <ArrowDownwardIcon fontSize="100" />
