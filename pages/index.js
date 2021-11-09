@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
   TextField,
@@ -10,7 +9,10 @@ import {
   Input,
   IconButton,
   FormHelperText,
+  Typography,
+  Grid,
 } from "@material-ui/core";
+
 import { FileCopy } from "@material-ui/icons";
 import isURL from "validator/lib/isURL";
 
@@ -21,35 +23,8 @@ import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import Radium, { StyleRoot } from "radium";
 import Head from "next/head";
-
-const useStyles = makeStyles((theme) => ({
-  main: {
-    textAlign: "center",
-    marginTop: "10%",
-    boxShadow: "0 2px 5px 0 #d43071, 0 8px 40px 0 rgb(10 14 29 / 6%)",
-    padding: "5rem",
-    paddingTop: "1rem",
-  },
-  shortenedUrl: {
-    marginTop: "2rem",
-  },
-  button: {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-    "&:hover": {
-      background: "#d43071",
-    },
-  },
-  arrowContainer: {
-    margin: "2rem 2rem",
-  },
-  logo: {
-    width: 100,
-    height: "auto",
-    marginBottom: "2rem",
-  },
-}));
+import classes from "../styles/Home.module.css";
+import Footer from "../components/Footer";
 
 const styles = {
   bounce: {
@@ -59,8 +34,6 @@ const styles = {
 };
 
 export default function Home(props) {
-  const classes = useStyles();
-
   const [urlToShorten, setUrlToShorten] = useState("");
   const [shortening, setShortening] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState("");
@@ -91,6 +64,7 @@ export default function Home(props) {
         .then((res) => {
           if (res.data) {
             setShortenedUrl(res.data.shortenedUrl);
+            copyShortenedUrl(res.data.shortenedUrl);
           }
           setShortening(false);
         });
@@ -102,8 +76,8 @@ export default function Home(props) {
     }
   };
 
-  function copyShortenedUrl() {
-    navigator.clipboard.writeText(siteUrl + "/" + shortenedUrl);
+  function copyShortenedUrl(param) {
+    navigator.clipboard.writeText(siteUrl + "/" + param);
     setCopyButtonClicked(true);
   }
 
@@ -133,19 +107,47 @@ export default function Home(props) {
       <Container component="main" className={classes.main} maxWidth="sm">
         <img src="/assets/images/kuty_logo.png" className={classes.logo} />
         <form
-          className={classes.root}
+          className={classes.form}
           noValidate
           autoComplete="off"
           onSubmit={shortenUrl}
         >
+          <Typography variant="h2" component="h2" className={classes.title}>
+            The Simplest URL Shortener
+          </Typography>
+          <Typography variant="p" component="p" className={classes.description}>
+            People don't like long and messy URLs.{" "}
+            <a href="https://kuty.me" target="_blank">
+              Kuty.me
+            </a>{" "}
+            will help you to shorten any lengthy URL in just one click. It will
+            also be copied to your clipboard as default.
+          </Typography>
+          <Grid container spacing={2} className={classes.points}>
+            <Grid item xs={6} md={4} className={classes.point}>
+              <div className={classes.number}>1</div>
+              <div>Paste your lengthy URL</div>
+            </Grid>
+            <Grid item xs={6} md={4} className={classes.point}>
+              <div className={classes.number}>2</div>
+              <div>Press the Shorten button</div>
+            </Grid>
+            <Grid item xs={6} md={4} className={classes.point}>
+              <div className={classes.number}>3</div>
+              <div>You will get the shortened URL</div>
+            </Grid>
+          </Grid>
+
           <FormControl fullWidth className={classes.margin}>
             <TextField
               type="url"
               id="standard-basic"
-              label="Paste your URL here"
+              label="Paste your lengthy URL here"
               value={urlToShorten}
               pattern="https://.*"
               onChange={(e) => validateAndSetUrlToShorten(e.target.value)}
+              color="primary"
+              autoFocus={true}
             />
           </FormControl>
           {message.title ? (
@@ -192,11 +194,12 @@ export default function Home(props) {
                   id="standard-adornment-password"
                   label="Shortened URL"
                   value={siteUrl + "/" + shortenedUrl}
+                  color="red"
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={copyShortenedUrl}
+                        onClick={() => copyShortenedUrl(shortenedUrl)}
                       >
                         {copyButtonClicked ? "Copied" : <FileCopy />}
                       </IconButton>
@@ -204,9 +207,19 @@ export default function Home(props) {
                   }
                 />
               </FormControl>
+              {message.title ? (
+                <FormHelperText
+                  style={{
+                    color: "green",
+                  }}
+                >
+                  Shortened URL is copied to clipboard
+                </FormHelperText>
+              ) : null}
             </div>
           </StyleRoot>
         ) : null}
+        <Footer />
       </Container>
     </div>
   );
