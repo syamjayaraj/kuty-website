@@ -10,7 +10,6 @@ function Page() {
 
   const [loading, setLoading] = useState(false);
   const [urlData, setUrlData] = useState({});
-
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -53,6 +52,15 @@ function Page() {
         <title>{urlData.title}</title>
         <link rel="icon" href={urlData.icon} />
         <meta name="description" content={urlData.description} />
+
+        <meta name="theme-color" content="#000000" />
+
+        <meta name="og:type" content="website" />
+        <meta name="og:title" content={urlData.title} />
+
+        <meta name="og:url" content={urlData.url} />
+        <meta name="og:description" content={urlData.description} />
+        <meta name="og:image" content={urlData.icon} />
       </Head>
 
       {loading ? (
