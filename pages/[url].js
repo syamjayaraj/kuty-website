@@ -2,23 +2,26 @@ import React, { useEffect, useState } from "react";
 import { apiUrl } from "../config";
 import Loader from "react-loader-spinner";
 import Typography from "@material-ui/core/Typography";
-import { Helmet } from "react-helmet";
+import Head from "next/head";
+import { useRouter } from "next/router";
 
-function Page(props) {
+function Page() {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [urlData, setUrlData] = useState({});
 
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (props.match.params.url) {
+    if (router.query.url) {
       fetchUrlFromShortenedUrl();
     }
-  }, []);
+  }, [router.query.url]);
 
   let fetchUrlFromShortenedUrl = () => {
     setLoading(true);
-    let url = `${apiUrl}/url/${props.match.params.url}`;
+    let url = `${apiUrl}/url/${router.query.url}`;
     let requestOptions = {
       method: "GET",
       headers: {
@@ -45,12 +48,12 @@ function Page(props) {
         marginTop: "45vh",
       }}
     >
-      <Helmet>
+      <Head>
         <meta charSet="utf-8" />
         <title>{urlData.title}</title>
         <link rel="icon" href={urlData.icon} />
         <meta name="description" content={urlData.description} />
-      </Helmet>
+      </Head>
 
       {loading ? (
         <Loader

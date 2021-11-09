@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
@@ -9,7 +9,6 @@ import {
   InputLabel,
   Input,
   IconButton,
-  Typography,
   FormHelperText,
 } from "@material-ui/core";
 import { FileCopy } from "@material-ui/icons";
@@ -21,7 +20,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import Radium, { StyleRoot } from "radium";
-import { Helmet } from "react-helmet";
+import Head from "next/head";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -70,6 +69,8 @@ export default function Home(props) {
     title: "",
     type: "",
   });
+
+  console.log(apiUrl, "api");
 
   let shortenUrl = (e) => {
     e.preventDefault();
@@ -123,28 +124,11 @@ export default function Home(props) {
 
   return (
     <div className={classes.root}>
-      <Helmet>
-        <meta charset="utf-8" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-
+      <Head>
         <title>
           URL Shortener - Paste your lengthy URL and shorten it | Kuty.me
         </title>
-        <link rel="icon" href="/favicon.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated. The short URL will redirect to the lengthy URL you pasted."
-        />
-      </Helmet>
+      </Head>
 
       <Container component="main" className={classes.main} maxWidth="sm">
         <img src="/assets/images/kuty_logo.png" className={classes.logo} />
