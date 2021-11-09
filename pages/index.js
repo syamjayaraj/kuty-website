@@ -72,6 +72,12 @@ export default function Home(props) {
             });
           }
           setShortening(false);
+        })
+        .catch((err) => {
+          setMessage({
+            title: "Unable to shorten that link. It is not a valid url.",
+            type: "invalid",
+          });
         });
     } else {
       setMessage({
