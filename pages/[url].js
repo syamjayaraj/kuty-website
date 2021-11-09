@@ -5,40 +5,24 @@ import Typography from "@material-ui/core/Typography";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-function Page() {
+function Page(props) {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [urlData, setUrlData] = useState({});
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (router.query.url) {
-      fetchUrlFromShortenedUrl();
+    if (props.apiResponse) {
+      setLoading(false);
+      if (props.apiResponse.status === 200 && props.apiResponse.data) {
+        setUrlData(props.apiResponse.data);
+        window.location.replace(props.apiResponse.data);
+      } else {
+        setMessage(props.apiResponse.message);
+      }
     }
-  }, [router.query.url]);
-
-  let fetchUrlFromShortenedUrl = () => {
-    setLoading(true);
-    let url = `${apiUrl}/url/${router.query.url}`;
-    let requestOptions = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    fetch(url, requestOptions)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.data) {
-          setUrlData(res.data);
-          window.location.replace(res.data.url);
-        } else {
-          setMessage(res.message);
-        }
-        setLoading(false);
-      });
-  };
+  }, [props.apiResponse.urlData]);
 
   return (
     <div
@@ -60,7 +44,7 @@ function Page() {
 
         <meta name="og:url" content={urlData.url} />
         <meta name="og:description" content={urlData.description} />
-        <meta name="og:image" content={urlData.icon} />
+        <meta name="og:image" content={urlData.image} />
       </Head>
 
       {loading ? (
@@ -79,4 +63,24 @@ function Page() {
     </div>
   );
 }
+
+export async function getServerSideProps(context) {
+  let url = `${apiUrl}/url/${context.query.url}`;
+  let requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const res = await fetch(url, requestOptions);
+  const resJson = await res.json();
+
+  return {
+    props: {
+      apiResponse: resJson,
+    },
+  };
+}
+
 export default Page;
