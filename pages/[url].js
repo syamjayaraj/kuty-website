@@ -42,7 +42,7 @@ function Page(props) {
         <meta name="og:type" content="website" />
         <meta name="og:title" content={urlData.title} />
 
-        <meta name="og:url" content={urlData.url} />
+        <meta name="og:url" content={props.apiResponse.data.url} />
         <meta name="og:description" content={urlData.description} />
         <meta name="og:image" content={urlData.image} />
       </Head>
