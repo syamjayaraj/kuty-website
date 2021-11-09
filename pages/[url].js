@@ -8,15 +8,15 @@ import { useRouter } from "next/router";
 function Page(props) {
   const router = useRouter();
 
+  let urlData = props.apiResponse.data.metaData;
+
   const [loading, setLoading] = useState(true);
-  const [urlData, setUrlData] = useState({});
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (props.apiResponse) {
       setLoading(false);
       if (props.apiResponse.status === 200 && props.apiResponse.data) {
-        setUrlData(props.apiResponse.data.metaData);
         window.location.replace(props.apiResponse.data.url);
       } else {
         setMessage(props.apiResponse.message);
