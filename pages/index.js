@@ -64,7 +64,7 @@ export default function Home(props) {
         .then((res) => {
           if (res.data) {
             setShortenedUrl(res.data.shortenedUrl);
-            copyShortenedUrl(res.data.shortenedUrl);
+            // copyShortenedUrl(res.data.shortenedUrl);
           }
           setShortening(false);
         });
@@ -120,8 +120,7 @@ export default function Home(props) {
             <a href="https://kuty.me" target="_blank">
               Kuty.me
             </a>{" "}
-            will help you to shorten any lengthy URL in just one click. It will
-            also be copied to your clipboard as default.
+            will help you to shorten any lengthy URL in just one click.
           </Typography>
           <Grid container spacing={2} className={classes.points}>
             <Grid item xs={6} md={4} className={classes.point}>
