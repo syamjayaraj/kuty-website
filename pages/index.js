@@ -65,6 +65,11 @@ export default function Home(props) {
           if (res.data) {
             setShortenedUrl(res.data.shortenedUrl);
             // copyShortenedUrl(res.data.shortenedUrl);
+          } else {
+            setMessage({
+              title: "Unable to shorten that link. It is not a valid url.",
+              type: "invalid",
+            });
           }
           setShortening(false);
         });
