@@ -209,7 +209,6 @@ export default function Home(props) {
               value={messageToGenerateLink}
               onChange={(e) => setMessageToGenerateLink(e.target.value)}
               color="primary"
-              autoFocus={true}
             />
           </FormControl>
 
