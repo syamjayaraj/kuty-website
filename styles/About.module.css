@@ -111,3 +111,55 @@
     font-size: 0.8em;
   }
 }
+
+.about {
+  margin: 2rem;
+  color: rgb(68, 68, 68);
+}
+.about h1,
+.about h2,
+.about h3 {
+  margin: 0 0 0.35em;
+}
+.about p {
+  font-size: 1.2em;
+}
+.about h1 {
+  font-size: 50px;
+}
+.about h2 {
+  font-size: 28px;
+}
+.about h3 {
+  font-size: 20px;
+}
+.about p {
+  margin: 0 0 1.15em;
+}
+.about p + .about h2 {
+  margin-top: 1.5em;
+}
+.about .container {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 24px;
+}
+.about header {
+  background-color: rebeccapurple;
+  color: #fff;
+}
+
+.about pre {
+  color: rgb(112, 112, 112);
+  background: #f1f1f1;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 1em;
+  border-radius: 4px;
+  width: auto;
+  font-family: monospace;
+}
+.about pre a {
+  white-space: pre-wrap;
+}

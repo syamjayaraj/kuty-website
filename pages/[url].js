@@ -8,7 +8,10 @@ import { useRouter } from "next/router";
 function Page(props) {
   const router = useRouter();
 
-  let urlData = props.apiResponse.data.metaData;
+  let urlData =
+    props.apiResponse &&
+    props.apiResponse.data &&
+    props.apiResponse.data.metaData;
 
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -33,18 +36,25 @@ function Page(props) {
     >
       <Head>
         <meta charSet="utf-8" />
-        <title>{urlData.title}</title>
-        <link rel="icon" href={urlData.icon} />
-        <meta name="description" content={urlData.description} />
+        <title>{urlData && urlData.title}</title>
+        <link rel="icon" href={urlData && urlData.icon} />
+        <meta name="description" content={urlData && urlData.description} />
 
         <meta name="theme-color" content="#000000" />
 
         <meta name="og:type" content="website" />
-        <meta name="og:title" content={urlData.title} />
+        <meta name="og:title" content={urlData && urlData.title} />
 
-        <meta name="og:url" content={props.apiResponse.data.url} />
-        <meta name="og:description" content={urlData.description} />
-        <meta name="og:image" content={urlData.image} />
+        <meta
+          name="og:url"
+          content={
+            props.apiResponse &&
+            props.apiResponse.data &&
+            props.apiResponse.data.url
+          }
+        />
+        <meta name="og:description" content={urlData && urlData.description} />
+        <meta name="og:image" content={urlData && urlData.image} />
       </Head>
 
       {loading ? (

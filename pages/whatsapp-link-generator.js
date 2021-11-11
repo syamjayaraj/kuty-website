@@ -13,8 +13,7 @@ import {
   Grid,
 } from "@material-ui/core";
 
-import { FileCopy } from "@material-ui/icons";
-import isURL from "validator/lib/isURL";
+import isMobilePhone from "validator/lib/isMobilePhone";
 
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { apiUrl, siteUrl } from "../config";
@@ -25,6 +24,7 @@ import Radium, { StyleRoot } from "radium";
 import Head from "next/head";
 import classes from "../styles/Home.module.css";
 import Footer from "../components/Footer";
+import DropdownLink from "../components/DropdownLink";
 import Header from "../components/Header";
 
 const styles = {
@@ -35,7 +35,9 @@ const styles = {
 };
 
 export default function Home(props) {
-  const [urlToShorten, setUrlToShorten] = useState("");
+  const [mobileNumberToGenerateLink, setMobileNumberToGenerateLink] =
+    useState("");
+  const [messageToGenerateLink, setMessageToGenerateLink] = useState("");
   const [shortening, setShortening] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState("");
   const [copyButtonClicked, setCopyButtonClicked] = useState(false);
@@ -44,29 +46,32 @@ export default function Home(props) {
     type: "",
   });
 
-  let shortenUrl = (e) => {
+  let generateShortLink = (e) => {
     e.preventDefault();
-    if (isURL(urlToShorten)) {
+    if (isMobilePhone(mobileNumberToGenerateLink)) {
       setShortening(true);
       setShortenedUrl("");
       setCopyButtonClicked(false);
-      let url = `${apiUrl}/url/shorten`;
+      let url = `${apiUrl}/url/shorten/whatsapp`;
       let requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url: urlToShorten }),
+        body: JSON.stringify({
+          mobileNumber: mobileNumberToGenerateLink,
+          message: messageToGenerateLink,
+        }),
       };
       fetch(url, requestOptions)
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
             setShortenedUrl(res.data.shortenedUrl);
-            // copyShortenedUrl(res.data.shortenedUrl);
           } else {
             setMessage({
-              title: "Unable to shorten that link. It is not a valid url.",
+              title:
+                "Unable to generate the link. It is not a valid mobile number",
               type: "invalid",
             });
           }
@@ -74,13 +79,14 @@ export default function Home(props) {
         })
         .catch((err) => {
           setMessage({
-            title: "Unable to shorten that link. It is not a valid url.",
+            title:
+              "Unable to generate the link. It is not a valid mobile number",
             type: "invalid",
           });
         });
     } else {
       setMessage({
-        title: "Unable to shorten that link. It is not a valid url.",
+        title: "Unable to generate the link. It is not a valid mobile number",
         type: "invalid",
       });
     }
@@ -92,9 +98,9 @@ export default function Home(props) {
   }
 
   let validateAndSetUrlToShorten = (url) => {
-    if (isURL(url)) {
+    if (isMobilePhone(url)) {
       setMessage({
-        title: "Great! It is a valid url.",
+        title: "Great! It is a valid mobile number.",
         type: "valid",
       });
     } else {
@@ -103,33 +109,35 @@ export default function Home(props) {
         type: "",
       });
     }
-    setUrlToShorten(url);
+    setMobileNumberToGenerateLink(url);
   };
 
   return (
     <div className={classes.root}>
       <Head>
         <title>
-          URL Shortener - Paste your lengthy URL and shorten it | Kuty.me
+          Whatsapp Link Generator - Create a Whatsapp Link and Share on
+          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me
         </title>
         <meta name="theme-color" content="#000000" />
         <meta
           name="description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
+          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
         />
         <meta name="og:type" content="website" />
         <meta
           name="og:title"
-          content=" URL Shortener - Paste your lengthy URL and shorten it | Kuty.me"
+          content="Whatsapp Link Generator - Create a Whatsapp Link and Share on
+          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me"
         />
         <meta
           name="keywords"
-          content="simple url shortener, kuty.me, kuty, kuty url short, link shortener, make url small"
+          content="whatsapp link generator, kuty.me whatsapp link, kuty, short whatsapp link, link shortener, make whatsapp url small"
         />
-        <meta name="og:url" content="https://kuty.me" />
+        <meta name="og:url" content="https://kuty.me/whatsapp-link-generator" />
         <meta
           name="og:description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
+          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
         />
         <meta name="og:image" content="/assets/images/kuty_logo.png" />
       </Head>
@@ -140,45 +148,46 @@ export default function Home(props) {
           className={classes.form}
           noValidate
           autoComplete="off"
-          onSubmit={shortenUrl}
+          onSubmit={generateShortLink}
         >
           <Typography variant="h2" component="h2" className={classes.title}>
-            The Simplest URL Shortener
+            Whatsapp Link Generator
           </Typography>
           <Typography variant="p" component="p" className={classes.description}>
-            People don't like long and messy URLs.{" "}
-            <a href="https://kuty.me" target="_blank">
-              Kuty.me
+            <a href="https://kuty.me/whatsapp-link-generator" target="_blank">
+              Kuty.me Whatsapp Link Generator
             </a>{" "}
-            will help you to shorten any lengthy URL in just one click.
+            will help you to create a short link to your WhatsApp profile.
+            Anyone who clicks the link will direct them to your WhatsApp
+            profile. So that they can easily contact you via Whatsapp.
           </Typography>
           <Grid container spacing={2} className={classes.points}>
             <Grid item xs={6} md={4} className={classes.point}>
               <div className={classes.number}>1</div>
-              <div>Paste your lengthy URL</div>
+              <div>Type your Whatsapp number with country code</div>
             </Grid>
             <Grid item xs={6} md={4} className={classes.point}>
               <div className={classes.number}>2</div>
-              <div>Press the Shorten button</div>
+              <div>Type a message (optional)</div>
             </Grid>
             <Grid item xs={6} md={4} className={classes.point}>
               <div className={classes.number}>3</div>
-              <div>You will get the shortened URL</div>
+              <div>You will get the shortened URL to your Whatsapp profile</div>
             </Grid>
           </Grid>
 
-          <FormControl fullWidth className={classes.margin}>
+          <FormControl fullWidth className={classes.mobileNumberInput}>
             <TextField
-              type="url"
+              type="number"
               id="standard-basic"
-              label="Paste your lengthy URL here"
-              value={urlToShorten}
-              pattern="https://.*"
+              label="Type your Whatsapp number here (including country code)"
+              value={mobileNumberToGenerateLink}
               onChange={(e) => validateAndSetUrlToShorten(e.target.value)}
               color="primary"
               autoFocus={true}
             />
           </FormControl>
+
           {message.title ? (
             <FormHelperText
               style={
@@ -189,6 +198,20 @@ export default function Home(props) {
               {message.title}
             </FormHelperText>
           ) : null}
+
+          <FormControl fullWidth className={classes.messageNumberInput}>
+            <TextField
+              type="textarea"
+              multiline
+              rows="3"
+              id="standard-basic"
+              label="Type any message (optional)"
+              value={messageToGenerateLink}
+              onChange={(e) => setMessageToGenerateLink(e.target.value)}
+              color="primary"
+              autoFocus={true}
+            />
+          </FormControl>
 
           <div className={classes.arrowContainer}>
             <ArrowDownwardIcon fontSize="100" />
@@ -203,7 +226,7 @@ export default function Home(props) {
             />
           ) : (
             <Button variant="outlined" className={classes.button} type="submit">
-              Shorten
+              Generate Short Link
             </Button>
           )}
         </form>
@@ -216,7 +239,7 @@ export default function Home(props) {
 
               <FormControl fullWidth className={classes.margin}>
                 <InputLabel htmlFor="standard-adornment-password">
-                  Shortened URL
+                  Your shortened Whatsapp URL
                 </InputLabel>
                 <Input
                   type="url"
@@ -229,8 +252,9 @@ export default function Home(props) {
                       <IconButton
                         aria-label="toggle password visibility"
                         onClick={() => copyShortenedUrl(shortenedUrl)}
+                        className={classes.copyButton}
                       >
-                        {copyButtonClicked ? "Copied" : <FileCopy />}
+                        {copyButtonClicked ? "Copied" : "Copy"}
                       </IconButton>
                     </InputAdornment>
                   }
