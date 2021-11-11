@@ -95,6 +95,31 @@
   font-size: 0.9em !important;
 }
 
+.menu {
+  display: flex;
+  justify-content: flex-end;
+  color: #5c5c5c;
+}
+.menu a {
+  text-decoration: none;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  padding-top: 0;
+}
+.menu a:hover {
+  background: whitesmoke;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  padding-top: 0.5rem;
+  transition-duration: 0.3s;
+}
+
+.mobileMenu {
+  display: none;
+  color: #5c5c5c;
+}
+
 @media only screen and (max-width: 600px) {
   .main {
     width: 90% !important;
@@ -109,5 +134,11 @@
   }
   .mobileNumberInput label {
     font-size: 0.8em;
+  }
+  .menu {
+    display: none;
+  }
+  .mobileMenu {
+    display: block;
   }
 }

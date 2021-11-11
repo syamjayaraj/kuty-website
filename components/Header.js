@@ -2,8 +2,9 @@ import React from "react";
 import DropdownLink from "./DropdownLink";
 import Link from "next/link";
 import classes from "../styles/Home.module.css";
-
-function Footer() {
+import { useRouter } from "next/router";
+function Header() {
+  const router = useRouter();
   return (
     <div>
       <Link href="/">
@@ -11,9 +12,45 @@ function Footer() {
           <img src="/assets/images/kuty_logo.png" className={classes.logo} />
         </a>
       </Link>
-
-      <DropdownLink />
+      <div>
+        <div className={classes.menu}>
+          <Link href="/">
+            <a
+              className={classes.dropdownItem}
+              style={router.pathname === "/" ? { display: "none" } : null}
+            >
+              URL Shortener
+            </a>
+          </Link>
+          <Link href="/whatsapp-link-generator">
+            <a
+              className={classes.dropdownItem}
+              style={
+                router.pathname === "/whatsapp-link-generator"
+                  ? { display: "none" }
+                  : null
+              }
+            >
+              Whatsapp Link Generator
+            </a>
+          </Link>
+          <Link href="/about">
+            <a
+              className={classes.dropdownItem}
+              style={router.pathname === "/about" ? { display: "none" } : null}
+            >
+              About
+            </a>
+          </Link>
+          {/* <Link href="/blog">
+        <a className={classes.dropdownItem}>Blog</a>
+      </Link> */}
+        </div>
+        <div className={classes.mobileMenu}>
+          <DropdownLink />
+        </div>
+      </div>
     </div>
   );
 }
-export default Footer;
+export default Header;
