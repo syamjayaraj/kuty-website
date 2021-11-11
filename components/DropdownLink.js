@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import onClickOutside from "react-onclickoutside";
-import DropdownList from "./DropDownList";
+import DropdownList from "./DropdownList";
 import { Menu } from "@material-ui/icons";
 import classes from "../styles/Dropdown.module.css";
 
