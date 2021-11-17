@@ -34,12 +34,14 @@ function Header() {
               Whatsapp Link Generator
             </a>
           </Link>
-          <Link href="/about">
+          <Link href="/quiz-maker">
             <a
               className={classes.dropdownItem}
-              style={router.pathname === "/about" ? { display: "none" } : null}
+              style={
+                router.pathname === "/quiz-maker" ? { display: "none" } : null
+              }
             >
-              About
+              Quiz Maker
             </a>
           </Link>
           {/* <Link href="/blog">

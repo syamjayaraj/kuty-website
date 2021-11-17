@@ -145,7 +145,7 @@ export default function Home(props) {
           <Typography variant="h2" component="h2" className={classes.title}>
             The Simplest URL Shortener
           </Typography>
-          <Typography variant="p" component="p" className={classes.description}>
+          <Typography variant="body1" className={classes.description}>
             People don't like long and messy URLs.{" "}
             <a href="https://kuty.me" target="_blank">
               Kuty.me

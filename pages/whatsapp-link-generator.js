@@ -153,7 +153,7 @@ export default function Home(props) {
           <Typography variant="h2" component="h2" className={classes.title}>
             Whatsapp Link Generator
           </Typography>
-          <Typography variant="p" component="p" className={classes.description}>
+          <Typography variant="body1" className={classes.description}>
             <a href="https://kuty.me/whatsapp-link-generator" target="_blank">
               Kuty.me Whatsapp Link Generator
             </a>{" "}
