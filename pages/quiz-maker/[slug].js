@@ -16,7 +16,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import Head from "next/head";
-import classes from "../styles/Home.module.css";
+import classes from "../../styles/Home.module.css";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 
