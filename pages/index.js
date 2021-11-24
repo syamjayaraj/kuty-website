@@ -191,16 +191,12 @@ export default function Home(props) {
           ) : null}
 
           <div className={classes.arrowContainer}>
-            <ArrowDownwardIcon fontSize="100" />
+            <ArrowDownwardIcon fontSize="medium" />
           </div>
           {shortening ? (
-            <Loader
-              type="Puff"
-              color="#e3e2e1"
-              height={100}
-              width={100}
-              timeout={3000} //3 secs
-            />
+            <div className={classes.loaderContainer}>
+              <Loader type="Puff" color="#e3e2e1" height={100} width={100} />
+            </div>
           ) : (
             <Button variant="outlined" className={classes.button} type="submit">
               Shorten
@@ -211,7 +207,7 @@ export default function Home(props) {
           <StyleRoot>
             <div className={classes.shortenedUrl} style={styles.bounce}>
               <div className={classes.arrowContainer}>
-                <ArrowDownwardIcon fontSize="100" />
+                <ArrowDownwardIcon fontSize="medium" />
               </div>
 
               <FormControl fullWidth className={classes.margin}>

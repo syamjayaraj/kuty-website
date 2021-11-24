@@ -14,6 +14,10 @@ function Footer() {
           <Link href="/about">
             <a>About</a>
           </Link>
+          &nbsp;|&nbsp;
+          <Link href="/blog">
+            <a>Blog</a>
+          </Link>
         </Typography>
       </Container>
     </footer>

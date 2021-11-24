@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link
             rel="stylesheet"
@@ -41,7 +41,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
 
-          <script
+          {/* <script
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-VX1GKC4LQD"
           ></script>
@@ -57,7 +57,7 @@ export default class MyDocument extends Document {
             });
           `,
             }}
-          />
+          /> */}
         </Head>
         <body>
           <Main />

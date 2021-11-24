@@ -180,11 +180,12 @@ export default function Home(props) {
             <TextField
               type="number"
               id="standard-basic"
-              label="Type your Whatsapp number here (including country code)"
+              label="Type your Whatsapp number here (including country code without +)"
               value={mobileNumberToGenerateLink}
               onChange={(e) => validateAndSetUrlToShorten(e.target.value)}
               color="primary"
               autoFocus={true}
+              variant="outlined"
             />
           </FormControl>
 
@@ -209,20 +210,17 @@ export default function Home(props) {
               value={messageToGenerateLink}
               onChange={(e) => setMessageToGenerateLink(e.target.value)}
               color="primary"
+              variant="outlined"
             />
           </FormControl>
 
           <div className={classes.arrowContainer}>
-            <ArrowDownwardIcon fontSize="100" />
+            <ArrowDownwardIcon fontSize="medium" />
           </div>
           {shortening ? (
-            <Loader
-              type="Puff"
-              color="#e3e2e1"
-              height={100}
-              width={100}
-              timeout={3000} //3 secs
-            />
+            <div className={classes.loaderContainer}>
+              <Loader type="Puff" color="#e3e2e1" height={100} width={100} />
+            </div>
           ) : (
             <Button variant="outlined" className={classes.button} type="submit">
               Generate Short Link
@@ -233,7 +231,7 @@ export default function Home(props) {
           <StyleRoot>
             <div className={classes.shortenedUrl} style={styles.bounce}>
               <div className={classes.arrowContainer}>
-                <ArrowDownwardIcon fontSize="100" />
+                <ArrowDownwardIcon fontSize="medium" />
               </div>
 
               <FormControl fullWidth className={classes.margin}>

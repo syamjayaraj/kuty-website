@@ -1,17 +1,23 @@
-import React from "react";
-import DropdownLink from "./DropdownLink";
+import classes from "../styles/BlogHeader.module.css";
 import Link from "next/link";
-import classes from "../styles/Home.module.css";
 import { useRouter } from "next/router";
-function Header() {
+import DropdownLink from "./DropdownLink";
+
+export default function BlogHeader() {
   const router = useRouter();
+
   return (
-    <div>
-      <Link href="/">
-        <a>
-          <img src="/assets/images/kuty_logo.png" className={classes.logo} />
-        </a>
-      </Link>
+    <div className={classes.blogHeader}>
+      <div>
+        <Link href="/">
+          <a>
+            <img src="/assets/images/kuty_logo.png" className={classes.logo} />
+          </a>
+        </Link>
+        <Link href="/blog">
+          <h1 className={classes.title}>Blog</h1>
+        </Link>
+      </div>
       <div>
         <div className={classes.menu}>
           <Link href="/">
@@ -52,4 +58,3 @@ function Header() {
     </div>
   );
 }
-export default Header;
