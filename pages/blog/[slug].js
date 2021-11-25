@@ -52,7 +52,10 @@ export default function Post({ post, posts, preview }) {
                 <meta name="keywords" content={keywords} />
                 <meta name="og:url" content="https://kuty.me/blog" />
                 <meta name="og:description" content={metaDescription} />
-                <meta name="og:image" content={post.featuredImage?.node} />
+                <meta
+                  name="og:image"
+                  content={post.featuredImage?.node?.sourceUrl}
+                />
               </Head>
 
               <PostHeader
