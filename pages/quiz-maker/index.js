@@ -177,13 +177,9 @@ export default function Home(props) {
               </div>
             </div>
           ) : creatingQuiz ? (
-            <Loader
-              type="Puff"
-              color="#e3e2e1"
-              height={100}
-              width={100}
-              timeout={3000} //3 secs
-            />
+            <div className={classes.loaderContainer}>
+              <Loader type="Puff" color="#e3e2e1" height={100} width={100} />
+            </div>
           ) : (
             <Button variant="outlined" className={classes.button} type="submit">
               Start Creating Quiz

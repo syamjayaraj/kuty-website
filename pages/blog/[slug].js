@@ -20,13 +20,14 @@ export default function Post({ post, posts, preview }) {
     return <ErrorPage statusCode={404} />;
   }
 
-  let metaDescription = post.excerpt.replace(/<[^>]+>/g, "");
+  let metaDescription = post && post.excerpt.replace(/<[^>]+>/g, "");
   let keywords =
+    post &&
     post.tags &&
     post.tags.edges.map((edge) => {
       return edge.node.name + ",";
     });
-  keywords = keywords.toString();
+  keywords = keywords && keywords.toString();
 
   return (
     <Layout preview={preview}>
