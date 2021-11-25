@@ -20,6 +20,8 @@ export default function Post({ post, posts, preview }) {
     return <ErrorPage statusCode={404} />;
   }
 
+  console.log(post, "oop");
+
   let metaDescription = post && post.excerpt.replace(/<[^>]+>/g, "");
   let keywords =
     post &&
@@ -50,10 +52,7 @@ export default function Post({ post, posts, preview }) {
                 <meta name="keywords" content={keywords} />
                 <meta name="og:url" content="https://kuty.me/blog" />
                 <meta name="og:description" content={metaDescription} />
-                <meta
-                  name="og:image"
-                  content={post.featuredImage?.node?.sourceUrl}
-                />
+                <meta name="og:image" content={post.featuredImage?.node} />
               </Head>
 
               <PostHeader
