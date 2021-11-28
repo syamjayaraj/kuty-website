@@ -26,6 +26,9 @@ import classes from "../styles/Home.module.css";
 import Footer from "../components/Footer";
 import DropdownLink from "../components/DropdownLink";
 import Header from "../components/Header";
+import HeadComponent from "../components/whatsappLinkGenerator/HeadComponent";
+import TitleDescription from "../components/whatsappLinkGenerator/TItleDescription";
+import Instructions from "../components/whatsappLinkGenerator/Instructions";
 
 const styles = {
   bounce: {
@@ -114,33 +117,7 @@ export default function Home(props) {
 
   return (
     <div className={classes.root}>
-      <Head>
-        <title>
-          Whatsapp Link Generator - Create a Whatsapp Link and Share on
-          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me
-        </title>
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
-        />
-        <meta name="og:type" content="website" />
-        <meta
-          name="og:title"
-          content="Whatsapp Link Generator - Create a Whatsapp Link and Share on
-          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me"
-        />
-        <meta
-          name="keywords"
-          content="whatsapp link generator, kuty.me whatsapp link, kuty, short whatsapp link, link shortener, make whatsapp url small"
-        />
-        <meta name="og:url" content="https://kuty.me/whatsapp-link-generator" />
-        <meta
-          name="og:description"
-          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
-        />
-        <meta name="og:image" content="/assets/images/kuty_logo.png" />
-      </Head>
+      <HeadComponent />
 
       <Container component="main" className={classes.main} maxWidth="sm">
         <Header />
@@ -150,31 +127,8 @@ export default function Home(props) {
           autoComplete="off"
           onSubmit={generateShortLink}
         >
-          <Typography variant="h2" component="h2" className={classes.title}>
-            Whatsapp Link Generator
-          </Typography>
-          <Typography variant="body1" className={classes.description}>
-            <a href="https://kuty.me/whatsapp-link-generator" target="_blank">
-              Kuty.me Whatsapp Link Generator
-            </a>{" "}
-            will help you to create a short link to your WhatsApp profile.
-            Anyone who clicks the link will direct them to your WhatsApp
-            profile. So that they can easily contact you via Whatsapp.
-          </Typography>
-          <Grid container spacing={2} className={classes.points}>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>1</div>
-              <div>Type your Whatsapp number with country code</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>2</div>
-              <div>Type a message (optional)</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>3</div>
-              <div>You will get the shortened URL to your Whatsapp profile</div>
-            </Grid>
-          </Grid>
+          <TitleDescription />
+          <Instructions />
 
           <FormControl fullWidth className={classes.mobileNumberInput}>
             <TextField

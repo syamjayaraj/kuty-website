@@ -2,34 +2,15 @@ import React from "react";
 import { Container } from "@material-ui/core";
 import renderHTML from "react-render-html";
 
-import Head from "next/head";
 import classes from "../styles/About.module.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import HeadComponent from "../components/about/HeadComponent";
 
 export default function About() {
   return (
     <div className={classes.root}>
-      <Head>
-        <title>About | Kuty.me</title>
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
-        />
-        <meta name="og:type" content="website" />
-        <meta name="og:title" content=" About | Kuty.me" />
-        <meta
-          name="keywords"
-          content="about,kuty.me, kuty, about kuty url shortener, kuty whatsapp link generator"
-        />
-        <meta name="og:url" content="https://kuty.me/about" />
-        <meta
-          name="og:description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
-        />
-        <meta name="og:image" content="/assets/images/kuty_logo.png" />
-      </Head>
+      <HeadComponent />
 
       <Container component="main" className={classes.main} maxWidth="sm">
         <Header />

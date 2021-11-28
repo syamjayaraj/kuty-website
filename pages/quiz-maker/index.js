@@ -4,21 +4,24 @@ import {
   TextField,
   FormControl,
   Button,
-  FormHelperText,
   Typography,
+  Grid,
 } from "@material-ui/core";
 import Radium, { StyleRoot } from "radium";
-
+import { useRouter } from "next/router";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import { apiUrl, siteUrl } from "../../config";
+import { apiUrl } from "../../config";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import HeadComponent from "../../components/quiz/HeadComponent";
-import classes from "../../styles/Home.module.css";
+import classes from "../../styles/Quiz.module.css";
 import Footer from "../../components/Footer";
-import Instructions from "../../components/quiz/Instructions";
+import Instructions1 from "../../components/quiz/Instructions1";
+import Instructions2 from "../../components/quiz/Instructions2";
+import { ToastContainer, toast } from "react-toastify";
 import TitleDescription from "../../components/quiz/TItleDescription";
+import { ArrowRightAlt, Close, CheckCircle } from "@material-ui/icons";
 const styles = {
   bounce: {
     animation: "x 1s",
@@ -31,45 +34,75 @@ export default function Home(props) {
   const [instructions, setInstructions] = useState("");
   const [creatingQuiz, setCreatingQuiz] = useState(false);
   const [quiz, setQuiz] = useState({
-    questions: [],
-  });
-  const [questionTemp, setQuestionTemp] = useState({
     title: "",
-    options: [],
+    instructions: "",
   });
-  const [shareLinkCopyButtonClicked, setShareLinkCopyButtonClicked] =
-    useState(false);
-  const [resultLinkCopyButtonClicked, setResultLinkCopyButtonClicked] =
-    useState(false);
-  const [quizesInLocalStorage, setQuizezInLocalStorage] = useState([]);
-  const [message, setMessage] = useState({
-    title: "",
-    type: "",
-  });
+  const [questions, setQuestions] = useState([
+    {
+      title: "",
+      options: [
+        {
+          label: "A",
+          value: "",
+        },
+        {
+          label: "B",
+          value: "",
+        },
+        {
+          label: "C",
+          value: "",
+        },
+        {
+          label: "D",
+          value: "",
+        },
+      ],
+      correctOption: "",
+    },
+  ]);
+
+  const router = useRouter();
 
   useEffect(() => {
-    let quizes = JSON.parse(localStorage.getItem("quizes"));
-    setQuizezInLocalStorage(quizes);
-  }, []);
-
-  useEffect(() => {
-    if (quiz._id) {
-      let quizes = JSON.parse(localStorage.getItem("quizes"));
-      setQuizezInLocalStorage([quizes, quiz._id]);
+    if (router.query.slug) {
+      qetQuiz(router.query.slug);
     }
-  }, [quiz]);
+  }, [router.query.slug]);
+
+  let qetQuiz = (slug) => {
+    let url = `${apiUrl}/quiz/${slug}`;
+    let requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(url, requestOptions)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          if (res.data.questions.length !== 0) {
+            setQuestions(req.data.questions);
+          }
+          delete res.data.questions;
+          setQuiz(res.data);
+        } else {
+          toast.error("Unable to get the quiz");
+        }
+      })
+      .catch((err) => {
+        toast.error("Unable to get the quiz");
+      });
+  };
 
   let createQuiz = (e) => {
     e.preventDefault();
     if (title == "") {
-      setMessage({
-        title: "Title is required",
-        type: "invalid",
-      });
+      toast.error("Unable to create the quiz");
     } else {
       setCreatingQuiz(true);
       setQuiz({});
-      setShareLinkCopyButtonClicked(false);
       let url = `${apiUrl}/quiz`;
       let requestOptions = {
         method: "POST",
@@ -85,36 +118,140 @@ export default function Home(props) {
         .then((res) => res.json())
         .then((res) => {
           if (res.data) {
-            setMessage({
-              title: "",
-              type: "",
-            });
-            setQuiz(res.data);
-            if (quizesInLocalStorage.length !== 0) {
-              let newArray = [...quizesInLocalStorage, res.data._id];
-              localStorage.setItem("quizes", JSON.stringify(newArray));
-            } else {
-              localStorage.setItem("quizes", JSON.stringify([res.data._id]));
-            }
+            console.log(res.data, "lorem");
+            router.query.slug = res.data.slug;
+            router.push(router);
           } else {
-            setMessage({
-              title: "Unable to create the quiz",
-              type: "invalid",
-            });
+            toast.error("Unable to get the quiz");
           }
           setCreatingQuiz(false);
         })
         .catch((err) => {
-          setMessage({
-            title: "Unable to create the quiz",
-            type: "invalid",
-          });
+          toast.error("Unable to get the quiz");
         });
     }
   };
 
+  let updateQuiz = () => {
+    let url = `${apiUrl}/quiz/${quiz._id}`;
+    let requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        instructions: instructions,
+        questions: questions,
+      }),
+    };
+    fetch(url, requestOptions)
+      .then((res) => res.json())
+      .then((res) => {
+        if (!res.data) {
+          toast.error("Unable to update the quiz");
+        }
+      })
+      .catch((err) => {
+        toast.error("Unable to update the quiz");
+      });
+  };
+
+  let handleQuestionTitle = (value, questionIndex) => {
+    let questionsTemp = [...questions];
+    questionsTemp[questionIndex].title = value;
+    setQuestions(questionsTemp);
+  };
+
+  let handleQuestionOption = (value, questionIndex, optionIndex) => {
+    let questionsTemp = [...questions];
+    questionsTemp[questionIndex].options[optionIndex].value = value;
+    setQuestions(questionsTemp);
+  };
+
+  let handleCorrectOption = (value, questionIndex, optionIndex) => {
+    let questionsTemp = [...questions];
+    questionsTemp[questionIndex].correctOption = value;
+    setQuestions(questionsTemp);
+  };
+
+  let addQuestion = () => {
+    // let questionsTemp = [
+    //   ...questions,
+    //   {
+    //     title: "",
+    //     options: [
+    //       {
+    //         label: "A",
+    //         value: "",
+    //       },
+    //       {
+    //         label: "B",
+    //         value: "",
+    //       },
+    //       {
+    //         label: "C",
+    //         value: "",
+    //       },
+    //       {
+    //         label: "D",
+    //         value: "",
+    //       },
+    //     ],
+    //     correctOption: "",
+    //   },
+    // ];
+    // setQuestions(questionsTemp);
+    // updateQuiz();
+    addQuestion();
+  };
+
+  let removeQuestion = (questionIndex) => {
+    let questionsTemp = [...questions];
+    questionsTemp.splice(questionIndex, 1);
+    setQuestions(questionsTemp);
+    updateQuiz();
+  };
+
+  let publishQuiz = (e) => {
+    e.preventDefault();
+    let url = `${apiUrl}/quiz/${quiz._id}`;
+    let requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        questions: questions,
+      }),
+    };
+    fetch(url, requestOptions)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+        } else {
+          toast.error("Unable to update the quiz");
+        }
+      })
+      .catch((err) => {
+        toast.error("Unable to update the quiz");
+      });
+  };
+
   return (
     <div className={classes.root}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <Container component="main" className={classes.main} maxWidth="sm">
         <HeadComponent />
         <form
@@ -124,134 +261,195 @@ export default function Home(props) {
           onSubmit={createQuiz}
         >
           <TitleDescription />
-          <Instructions />
-
-          <FormControl fullWidth className={classes.messageNumberInput}>
-            <TextField
-              type="text"
-              id="outlined-name"
-              label="Enter a title for the quiz"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              color="primary"
-              variant="outlined"
-            />
-          </FormControl>
-          {message.title ? (
-            <FormHelperText
-              style={
-                message.type == "valid" ? { color: "green" } : { color: "red" }
-              }
-              id="component-error-text"
-            >
-              {message.title}
-            </FormHelperText>
-          ) : null}
-
-          <FormControl fullWidth className={classes.mobileNumberInput}>
-            <TextField
-              type="textarea"
-              multiline
-              rows="3"
-              id="standard-basic"
-              label="Type instructions for your contestants (optional)"
-              value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-              color="primary"
-              variant="outlined"
-            />
-          </FormControl>
-
-          <div className={classes.arrowContainer}>
-            <ArrowDownwardIcon fontSize="medium" />
-          </div>
+          <Instructions1 />
           {quiz._id ? (
+            <>
+              <div className={classes.titleInstructionContainer}>
+                <div className={classes.successMessage}>
+                  <div>
+                    <CheckCircle
+                      style={{
+                        color: "#85c76a",
+                      }}
+                    />
+                  </div>
+                  <Typography variant="body1">
+                    Quiz created successfully
+                  </Typography>
+                </div>
+                <div className={classes.titleInstruction}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <Typography variant="body1">Title:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Typography variant="h5">{quiz.title}</Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <Typography variant="body1">Instructions:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Typography variant="body1">
+                        {quiz.instructions}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </div>
+              </div>
+              <Instructions2 />
+            </>
+          ) : (
             <div>
-              <Typography variant="body1">
-                Quiz created successfully. Now start adding question and
-                options.
-              </Typography>
+              <FormControl fullWidth className={classes.messageNumberInput}>
+                <TextField
+                  type="text"
+                  id="outlined-name"
+                  label="Enter a title for the quiz"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  color="primary"
+                  variant="outlined"
+                />
+              </FormControl>
 
+              <FormControl fullWidth className={classes.mobileNumberInput}>
+                <TextField
+                  type="textarea"
+                  multiline
+                  rows="3"
+                  id="standard-basic"
+                  label="Type instructions for your contestants (optional)"
+                  value={instructions}
+                  onChange={(e) => setInstructions(e.target.value)}
+                  color="primary"
+                  variant="outlined"
+                />
+              </FormControl>
+            </div>
+          )}
+          {quiz._id ? null : (
+            <div>
               <div className={classes.arrowContainer}>
                 <ArrowDownwardIcon fontSize="medium" />
               </div>
+              {creatingQuiz ? (
+                <div className={classes.loaderContainer}>
+                  <Loader
+                    type="Puff"
+                    color="#e3e2e1"
+                    height={100}
+                    width={100}
+                  />
+                </div>
+              ) : (
+                <Button
+                  variant="outlined"
+                  className={classes.button}
+                  type="submit"
+                >
+                  Create Quiz
+                </Button>
+              )}
             </div>
-          ) : creatingQuiz ? (
-            <div className={classes.loaderContainer}>
-              <Loader type="Puff" color="#e3e2e1" height={100} width={100} />
-            </div>
-          ) : (
-            <Button variant="outlined" className={classes.button} type="submit">
-              Start Creating Quiz
-            </Button>
           )}
         </form>
 
-        {true ? (
+        {quiz._id ? (
           <div>
-            {quiz.questions &&
-              quiz.questions.map((question) => {
-                return (
-                  <StyleRoot>
-                    <div className={classes.shortenedUrl} style={styles.bounce}>
-                      <form
-                        className={classes.question}
-                        noValidate
-                        autoComplete="off"
+            {questions.map((question, questionIndex) => {
+              return (
+                <StyleRoot>
+                  <div className={classes.shortenedUrl} style={styles.bounce}>
+                    <form
+                      className={classes.question}
+                      noValidate
+                      autoComplete="off"
+                    >
+                      <div className={classes.questionNumber}>
+                        {questionIndex + 1}
+                      </div>
+                      <div
+                        className={classes.closeIcon}
+                        onClick={() => removeQuestion(questionIndex)}
                       >
-                        <div className={classes.questionNumber}>1</div>
+                        <Close />
+                      </div>
 
-                        <FormControl
-                          fullWidth
-                          className={classes.mobileNumberInput}
-                        >
-                          <TextField
-                            type="textarea"
-                            multiline
-                            rows="3"
-                            id="standard-basic"
-                            label="Type the question"
-                            value={question.title}
-                            onChange={(e) =>
-                              handleQuestionTitle(e.target.value)
-                            }
-                            color="primary"
-                            variant="outlined"
-                          />
-                        </FormControl>
+                      <FormControl
+                        fullWidth
+                        className={classes.mobileNumberInput}
+                      >
+                        <TextField
+                          type="textarea"
+                          multiline
+                          rows="3"
+                          id="standard-basic"
+                          label="Type the question"
+                          value={question.title}
+                          onChange={(e) =>
+                            handleQuestionTitle(e.target.value, questionIndex)
+                          }
+                          color="primary"
+                          variant="outlined"
+                        />
+                      </FormControl>
+                      {question.options.map((option, optionIndex) => {
+                        let correctOption =
+                          questions[questionIndex].options[optionIndex]
+                            .label === questions[questionIndex].correctOption
+                            ? true
+                            : false;
 
-                        <FormControl
-                          fullWidth
-                          className={classes.messageNumberInput}
-                        >
-                          <TextField
-                            borderColor="green"
-                            type="text"
-                            id="outlined-name"
-                            label="Option A"
-                            value={title}
-                            name="a"
-                            onChange={(e) => setOption(e.target.value)}
-                            color="primary"
-                            variant="outlined"
-                            InputProps={{
-                              style: {
-                                border: "2px solid #85c76a",
-                              },
-                              endAdornment: (
-                                <label className="radioContainer">
-                                  <input type="checkbox" checked="checked" />
-                                  <span className="checkmark"></span>
-                                </label>
-                              ),
-                            }}
-                          />
-                        </FormControl>
-                      </form>
-                    </div>
-                  </StyleRoot>
-                );
-              })}
+                        return (
+                          <FormControl
+                            fullWidth
+                            className={classes.messageNumberInput}
+                          >
+                            <TextField
+                              borderColor="green"
+                              type="text"
+                              id="outlined-name"
+                              label={`Option ${option.label}`}
+                              value={option.value}
+                              name={option.label}
+                              onChange={(e) =>
+                                handleQuestionOption(
+                                  e.target.value,
+                                  questionIndex,
+                                  optionIndex
+                                )
+                              }
+                              color="primary"
+                              variant="outlined"
+                              InputProps={{
+                                endAdornment: (
+                                  <label className="radioContainer">
+                                    <input
+                                      onChange={() =>
+                                        handleCorrectOption(
+                                          option.label,
+                                          questionIndex,
+                                          optionIndex
+                                        )
+                                      }
+                                      type="checkbox"
+                                      checked={correctOption ? true : false}
+                                    />
+                                    <span className="checkmark"></span>
+                                  </label>
+                                ),
+                              }}
+                            />
+                          </FormControl>
+                        );
+                      })}
+                    </form>
+                  </div>
+                </StyleRoot>
+              );
+            })}
             {false ? (
               <Loader
                 type="Puff"
@@ -265,20 +463,29 @@ export default function Home(props) {
                 variant="outlined"
                 className={classes.addQuestionButton}
                 type="submit"
+                onClick={addQuestion}
               >
                 Add Question
               </Button>
             )}
           </div>
         ) : null}
-
-        <Button
-          variant="outlined"
-          className={classes.addQuestionButton}
-          type="submit"
-        >
-          Publish Quiz
-        </Button>
+        {quiz._id ? (
+          <div className={classes.publishContainer}>
+            <div className={classes.leftSide}>
+              <p>Publish the quiz to public after adding all questions</p>
+              <ArrowRightAlt fontSize="medium" />
+            </div>
+            <Button
+              variant="outlined"
+              className={classes.publishButton}
+              type="submit"
+              onClick={publishQuiz}
+            >
+              Publish Quiz
+            </Button>
+          </div>
+        ) : null}
 
         <Footer />
       </Container>

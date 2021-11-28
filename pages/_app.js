@@ -2,6 +2,7 @@ import "../styles/index.css";
 import { useEffect } from "react";
 import "../styles/globals.css";
 import { useRouter } from "next/router";
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();

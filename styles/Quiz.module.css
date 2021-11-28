@@ -64,6 +64,51 @@
   background: #d43071;
 }
 
+.addQuestionButton {
+  height: 50px;
+  width: 100%;
+  margin-top: 1rem;
+  background: #303030;
+  color: white;
+  margin: 2rem 1rem;
+  width: 96%;
+  cursor: pointer;
+  margin-top: -0.9rem !important;
+  background: rgb(255, 255, 255) !important;
+}
+
+.addQuestionButton:hover {
+  background-color: rgb(243, 243, 243) !important;
+}
+
+.publishButton {
+  height: 50px;
+  width: 100%;
+  margin-top: 1rem;
+  background: #303030;
+  color: white;
+  margin: 2rem 1rem;
+  width: fit-content;
+  cursor: pointer;
+  margin-top: none;
+}
+
+.publishContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  justify-content: center;
+}
+.publishContainer .leftSide {
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+}
+.publishContainer .leftSide p {
+  font-size: 0.8em;
+  text-align: left;
+}
+
 .arrowContainer {
   margin: 1rem 1rem;
 }
@@ -128,6 +173,68 @@
 .loaderContainer {
   display: flex;
   justify-content: center;
+}
+
+.question {
+  margin-top: 1rem;
+  box-shadow: 0 2px 5px 0 #dfdfdf, 0 8px 40px 0 rgb(10 14 29 / 6%);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  position: relative;
+  padding-bottom: 2rem;
+}
+.question .questionNumber {
+  position: absolute;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  left: -0.2rem;
+  top: -0.5rem;
+  background: #303030;
+  border-radius: 0.3rem;
+  color: white;
+  width: 2rem;
+  height: 2rem;
+}
+.question .closeIcon {
+  position: absolute;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  right: -0.2rem;
+  top: -0.5rem;
+  background: #ffffff;
+  border-radius: 50%;
+  color: black;
+  width: 2rem;
+  box-shadow: 0 2px 5px 0 #dfdfdf, 0 8px 40px 0 rgb(10 14 29 / 6%);
+  height: 2rem;
+  cursor: pointer;
+}
+
+.question .closeIcon svg {
+  font-size: 1em;
+}
+
+.titleInstructionContainer {
+  box-shadow: 0 2px 5px 0 #dfdfdf, 0 8px 40px 0 rgb(10 14 29 / 6%);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #85c76a;
+  color: #5c5c5c;
+}
+.titleInstructionContainer .successMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.titleInstructionContainer .successMessage svg {
+  margin-right: 0.5rem;
+  font-size: 2.3em;
+}
+.titleInstructionContainer .titleInstruction {
+  text-align: left;
 }
 
 @media only screen and (max-width: 600px) {

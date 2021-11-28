@@ -26,6 +26,9 @@ import Head from "next/head";
 import classes from "../styles/Home.module.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import HeadComponent from "../components/urlShortener/HeadComponent";
+import TitleDescription from "../components/urlShortener/TItleDescription";
+import Instructions from "../components/urlShortener/Instructions";
 
 const styles = {
   bounce: {
@@ -108,32 +111,7 @@ export default function Home(props) {
 
   return (
     <div className={classes.root}>
-      <Head>
-        <title>
-          URL Shortener - Paste your lengthy URL and shorten it | Kuty.me
-        </title>
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
-        />
-        <meta name="og:type" content="website" />
-        <meta
-          name="og:title"
-          content=" URL Shortener - Paste your lengthy URL and shorten it | Kuty.me"
-        />
-        <meta
-          name="keywords"
-          content="simple url shortener, kuty.me, kuty, kuty url short, link shortener, make url small"
-        />
-        <meta name="og:url" content="https://kuty.me" />
-        <meta
-          name="og:description"
-          content="Kuty.me is the simplest URL shortener app. Paste your lengthy URL, press the Shorten button, and copy the short URL generated."
-        />
-        <meta name="og:image" content="/assets/images/kuty_logo.png" />
-      </Head>
-
+      <HeadComponent />
       <Container component="main" className={classes.main} maxWidth="sm">
         <Header />
         <form
@@ -142,30 +120,8 @@ export default function Home(props) {
           autoComplete="off"
           onSubmit={shortenUrl}
         >
-          <Typography variant="h2" component="h2" className={classes.title}>
-            The Simplest URL Shortener
-          </Typography>
-          <Typography variant="body1" className={classes.description}>
-            People don't like long and messy URLs.{" "}
-            <a href="https://kuty.me" target="_blank">
-              Kuty.me
-            </a>{" "}
-            will help you to shorten any lengthy URL in just one click.
-          </Typography>
-          <Grid container spacing={2} className={classes.points}>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>1</div>
-              <div>Paste your lengthy URL</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>2</div>
-              <div>Press the Shorten button</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>3</div>
-              <div>You will get the shortened URL</div>
-            </Grid>
-          </Grid>
+          <TitleDescription />
+          <Instructions />
 
           <FormControl fullWidth className={classes.margin}>
             <TextField

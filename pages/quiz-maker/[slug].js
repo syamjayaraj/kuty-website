@@ -32,10 +32,6 @@ export default function Home(props) {
   const [instructions, setInstructions] = useState("");
   const [creatingQuiz, setCreatingQuiz] = useState(false);
   const [quiz, setQuiz] = useState({});
-  const [shareLinkCopyButtonClicked, setShareLinkCopyButtonClicked] =
-    useState(false);
-  const [resultLinkCopyButtonClicked, setResultLinkCopyButtonClicked] =
-    useState(false);
 
   const [message, setMessage] = useState({
     title: "",
@@ -89,11 +85,6 @@ export default function Home(props) {
         });
     }
   };
-
-  function copyShortenedUrl(param) {
-    navigator.clipboard.writeText(siteUrl + "/" + param);
-    setShareLinkCopyButtonClicked(true);
-  }
 
   return (
     <div className={classes.root}>
