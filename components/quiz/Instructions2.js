@@ -5,16 +5,16 @@ export default function Instructions2() {
   return (
     <Grid container spacing={2} className={classes.points}>
       <Grid item xs={6} md={4} className={classes.point}>
-        <div className={classes.number}>4</div>
-        <div>Add questions, with options and correct answer</div>
+        <div className={classes.number}>1</div>
+        <div>Enter your name, Phone number and press the Start quiz button</div>
       </Grid>
       <Grid item xs={6} md={4} className={classes.point}>
-        <div className={classes.number}>5</div>
-        <div>Press Finish button</div>
+        <div className={classes.number}>2</div>
+        <div>Select correct option for each question</div>
       </Grid>
       <Grid item xs={6} md={4} className={classes.point}>
-        <div className={classes.number}>6</div>
-        <div>Copy the shortened URL to share with your contestants</div>
+        <div className={classes.number}>3</div>
+        <div>Your score will be published by the host</div>
       </Grid>
     </Grid>
   );

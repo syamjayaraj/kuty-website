@@ -94,3 +94,38 @@ footer {
 strong {
   word-break: break-all;
 }
+
+.swal2-styled.swal2-confirm {
+  background-color: white !important;
+  color: #e06666 !important;
+  padding: 0;
+  margin-right: 1rem;
+}
+
+.swal2-styled.swal2-confirm:hover {
+  background-image: none !important;
+  color: #dd3e3e !important;
+}
+
+.swal2-styled.swal2-confirm:focus,
+.swal2-styled.swal2-cancel:focus {
+  box-shadow: none !important ;
+}
+
+.swal2-styled.swal2-cancel {
+  padding: 0;
+  background-color: white !important;
+  color: #898989 !important;
+}
+.swal2-styled.swal2-cancel:hover {
+  background: white !important;
+  color: #3f3f3f;
+}
+.MuiListItem-button {
+  border: 1px solid #c5c5c5 !important;
+  border-radius: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+.MuiListItemIcon-root {
+  min-width: 1.5rem;
+}

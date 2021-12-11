@@ -175,6 +175,47 @@
   justify-content: center;
 }
 
+.quizesCreated {
+  margin-bottom: 1rem;
+}
+
+.quizesCreated .quizCreatedTitle {
+  font-weight: 400;
+  font-size: 1.1em;
+  text-align: left;
+  color: #5c5c5c;
+}
+
+.quizesCreated .card {
+  margin-top: 1rem;
+  box-shadow: 0 2px 5px 0 #dfdfdf, 0 8px 40px 0 rgb(10 14 29 / 6%);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  position: relative;
+  padding-bottom: 2rem;
+  cursor: pointer;
+}
+.quizesCreated a {
+  text-decoration: none;
+}
+.quizesCreated .card:hover {
+  box-shadow: 0 2px 5px 0 #afafaf, 0 8px 40px 0 rgb(10 14 29 / 6%);
+}
+.quizesCreated .card .cardTitle {
+  color: #5c5c5c;
+  margin-bottom: 0.5rem;
+}
+.quizesCreated .card .cardDescription {
+  color: #5c5c5c;
+}
+
+.createNew .createNewTitle {
+  font-weight: 400;
+  font-size: 1.1em;
+  text-align: left;
+  color: #5c5c5c;
+}
+
 .question {
   margin-top: 1rem;
   box-shadow: 0 2px 5px 0 #dfdfdf, 0 8px 40px 0 rgb(10 14 29 / 6%);

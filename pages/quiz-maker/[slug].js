@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
   FormControl,
   Button,
-  FormHelperText,
   Typography,
   Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
-import Radium, { StyleRoot } from "radium";
-
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import { apiUrl, siteUrl } from "../../config";
+import { fadeInDown } from "react-animations";
+import { useRouter } from "next/router";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
-import { fadeInDown } from "react-animations";
-import Head from "next/head";
-import classes from "../../styles/Home.module.css";
+import HeadComponent from "../../components/quiz/HeadComponent";
+import classes from "../../styles/Quiz.module.css";
 import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Instructions2 from "../../components/quiz/Instructions2";
+import { ToastContainer, toast } from "react-toastify";
+import TitleDescriptionContestant from "../../components/quiz/TItleDescriptionContenstant";
+import { getQuizPublic, startQuiz, submitAnswer } from "../../lib/quiz";
+import { ArrowRightAlt, Close, CheckCircle } from "@material-ui/icons";
+import Radium, { StyleRoot } from "radium";
 
 const styles = {
   bounce: {
@@ -28,318 +33,253 @@ const styles = {
 };
 
 export default function Home(props) {
-  const [title, setTitle] = useState("");
-  const [instructions, setInstructions] = useState("");
-  const [creatingQuiz, setCreatingQuiz] = useState(false);
-  const [quiz, setQuiz] = useState({});
-
-  const [message, setMessage] = useState({
+  const [quiz, setQuiz] = useState({
     title: "",
-    type: "",
+    instructions: "",
   });
+  const [startingQuiz, setStartingQuiz] = useState(false);
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [question, setQuestion] = useState({
+    options: [],
+  });
+  const [entry, setEntry] = useState({});
+  const [entryToken, setEntryToken] = useState("");
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
-  let createQuiz = (e) => {
-    e.preventDefault();
-    if (title == "") {
-      setMessage({
-        title: "Title is required",
-        type: "invalid",
-      });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.slug) {
+      handleGetQuiz();
+    }
+  }, [router.query.slug]);
+
+  let handleGetQuiz = async () => {
+    let res = await getQuizPublic(router.query.slug);
+    if (res.status === 200 && res.data) {
+      setQuiz(res.data);
     } else {
-      setCreatingQuiz(true);
-      setQuiz({});
-      setShareLinkCopyButtonClicked(false);
-      let url = `${apiUrl}/quiz`;
-      let requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: title,
-          instructions: instructions,
-        }),
-      };
-      fetch(url, requestOptions)
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.data) {
-            setMessage({
-              title: "",
-              type: "",
-            });
-            setQuiz(res.data);
-          } else {
-            setMessage({
-              title: "Unable to create the quiz",
-              type: "invalid",
-            });
+      toast.error("Unable to get the quiz");
+    }
+  };
+
+  let handleStartQuiz = async (e) => {
+    setStartingQuiz(true);
+    e.preventDefault();
+    let res = await startQuiz(name, phoneNumber, quiz);
+    if (res.status === 200 && res.question) {
+      let quizesInLocalStorage = JSON.parse(localStorage.getItem("quizes"));
+      if (quizesInLocalStorage && quizesInLocalStorage.length !== 0) {
+        quizesInLocalStorage.map((item, index) => {
+          if (item.slug === router.query.slug) {
+            quizesInLocalStorage[index] = {
+              ...quizesInLocalStorage[index],
+              entryToken: entryToken,
+            };
+            localStorage.setItem(
+              "quizes",
+              JSON.stringify(quizesInLocalStorage)
+            );
           }
-          setCreatingQuiz(false);
-        })
-        .catch((err) => {
-          setMessage({
-            title: "Unable to create the quiz",
-            type: "invalid",
-          });
         });
+      }
+      setEntry(res.data);
+      setQuestion(res.question);
+      setStartingQuiz(false);
+    } else {
+      toast.error("Unable to start the quiz");
+    }
+  };
+
+  let handleSubmitAnswer = async (e, answer) => {
+    e.preventDefault();
+    let res = await submitAnswer(entry._id, quiz, question, answer, entryToken);
+    if (res.status === 200) {
+      if (res.question) {
+        setQuestion(res.question);
+      } else {
+        setQuestion({ options: [] });
+        setQuizCompleted(true);
+      }
+    } else {
+      toast.error("Unable to submit the answer");
     }
   };
 
   return (
     <div className={classes.root}>
-      <Head>
-        <title>
-          Whatsapp Link Generator - Create a Whatsapp Link and Share on
-          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me
-        </title>
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
-        />
-        <meta name="og:type" content="website" />
-        <meta
-          name="og:title"
-          content="Whatsapp Link Generator - Create a Whatsapp Link and Share on
-          Instagram, Facebook, YouTube, Twitter etc. | Kuty.me"
-        />
-        <meta
-          name="keywords"
-          content="whatsapp link generator, kuty.me whatsapp link, kuty, short whatsapp link, link shortener, make whatsapp url small"
-        />
-        <meta name="og:url" content="https://kuty.me/whatsapp-link-generator" />
-        <meta
-          name="og:description"
-          content="Kuty.me provides the simplest Whatsapp link generator. Type your Whatsapp number, press the Generate Short Link button, and copy the short URL generated."
-        />
-        <meta name="og:image" content="/assets/images/kuty_logo.png" />
-      </Head>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       <Container component="main" className={classes.main} maxWidth="sm">
-        <Header />
+        <HeadComponent />
         <form
           className={classes.form}
           noValidate
           autoComplete="off"
-          onSubmit={createQuiz}
+          onSubmit={handleStartQuiz}
         >
-          <Typography variant="h2" component="h2" className={classes.title}>
-            Simple Quiz Maker
-          </Typography>
-          <Typography variant="body1" className={classes.description}>
-            Using&nbsp;
-            <a href="https://kuty.me/quiz-maker" target="_blank">
-              Kuty.me Quiz Maker
-            </a>
-            , you can create a quiz with multiple-choice questions.
-            <p>
-              After you finish creating the quiz, a short link will be provided
-              to share with your contestants. They can participate in the quiz
-              by clicking the link.
-            </p>
-            <p>
-              Another link and password will be provided where you can check the
-              result.
-            </p>
-          </Typography>
-          <Grid container spacing={2} className={classes.points}>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>1</div>
-              <div>Enter a tile for the quiz</div>
-            </Grid>
+          <TitleDescriptionContestant
+            title={quiz.title}
+            instructions={quiz.instructions}
+          />
 
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>2</div>
-              <div>Instructions for your contestants</div>
-            </Grid>
+          <>
+            <Instructions2 />
+          </>
 
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>3</div>
-              <div>Press Start Creating Quiz button</div>
-            </Grid>
+          {entry._id ? (
+            <>
+              <div className={classes.titleInstructionContainer}>
+                {quizCompleted ? (
+                  <div className={classes.successMessage}>
+                    <div>
+                      <CheckCircle
+                        style={{
+                          color: "#85c76a",
+                        }}
+                      />
+                    </div>
+                    <Typography variant="body1">Quiz completed</Typography>
+                  </div>
+                ) : (
+                  <div className={classes.successMessage}>
+                    <div>
+                      <CheckCircle
+                        style={{
+                          color: "#85c76a",
+                        }}
+                      />
+                    </div>
+                    <Typography variant="body1">Quiz started</Typography>
+                  </div>
+                )}
 
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>4</div>
-              <div>Add questions, with options and correct answer</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>5</div>
-              <div>Press Finish button</div>
-            </Grid>
-            <Grid item xs={6} md={4} className={classes.point}>
-              <div className={classes.number}>6</div>
-              <div>Copy the shortened URL to share with your contestants</div>
-            </Grid>
-          </Grid>
-
-          <FormControl fullWidth className={classes.messageNumberInput}>
-            <TextField
-              type="text"
-              id="outlined-name"
-              label="Enter a title for the quiz"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              color="primary"
-              variant="outlined"
-            />
-          </FormControl>
-          {message.title ? (
-            <FormHelperText
-              style={
-                message.type == "valid" ? { color: "green" } : { color: "red" }
-              }
-              id="component-error-text"
-            >
-              {message.title}
-            </FormHelperText>
-          ) : null}
-
-          <FormControl fullWidth className={classes.mobileNumberInput}>
-            <TextField
-              type="textarea"
-              multiline
-              rows="3"
-              id="standard-basic"
-              label="Type instructions for your contestants (optional)"
-              value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-              color="primary"
-              variant="outlined"
-            />
-          </FormControl>
-
-          <div className={classes.arrowContainer}>
-            <ArrowDownwardIcon fontSize="medium" />
-          </div>
-          {quiz._id ? (
-            <div>
-              <Typography variant="body1">
-                Quiz created successfully. Now start adding question and
-                options.
-              </Typography>
-
-              <div className={classes.arrowContainer}>
-                <ArrowDownwardIcon fontSize="medium" />
+                <div className={classes.titleInstruction}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <Typography variant="body1">Name:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Typography variant="h5">{entry.name}</Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <Typography variant="body1">Phone number:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                      <Typography variant="body1">
+                        {entry.phoneNumber}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </div>
               </div>
-            </div>
-          ) : creatingQuiz ? (
-            <Loader
-              type="Puff"
-              color="#e3e2e1"
-              height={100}
-              width={100}
-              timeout={3000} //3 secs
-            />
+              {quizCompleted ? null : (
+                <StyleRoot>
+                  <div className={classes.shortenedUrl} style={styles.bounce}>
+                    <form
+                      className={classes.question}
+                      noValidate
+                      autoComplete="off"
+                    >
+                      <FormControl
+                        fullWidth
+                        className={classes.mobileNumberInput}
+                      >
+                        <Typography variant="body1">
+                          {question.title}
+                        </Typography>
+                      </FormControl>
+                      <List
+                        component="nav"
+                        className={classes.root}
+                        aria-label="contacts"
+                      >
+                        {question.options.map((option, optionIndex) => {
+                          return (
+                            <ListItem
+                              button
+                              key={optionIndex}
+                              onClick={(e) =>
+                                handleSubmitAnswer(e, option.label)
+                              }
+                            >
+                              <ListItemIcon>{option.label}</ListItemIcon>
+                              <ListItemText primary={option.value} />
+                            </ListItem>
+                          );
+                        })}
+                      </List>
+                    </form>
+                  </div>
+                </StyleRoot>
+              )}
+            </>
           ) : (
-            <Button variant="outlined" className={classes.button} type="submit">
-              Start Creating Quiz
-            </Button>
-          )}
-        </form>
-
-        {quiz._id ? (
-          <StyleRoot>
-            <div className={classes.shortenedUrl} style={styles.bounce}>
-              <form
-                className={classes.question}
-                noValidate
-                autoComplete="off"
-                onSubmit={createQuiz}
-              >
-                <div className={classes.questionNumber}>1</div>
+            <>
+              <div className={classes.createNew}>
+                <FormControl fullWidth className={classes.messageNumberInput}>
+                  <TextField
+                    type="text"
+                    id="outlined-name"
+                    label="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    color="primary"
+                    variant="outlined"
+                  />
+                </FormControl>
 
                 <FormControl fullWidth className={classes.mobileNumberInput}>
                   <TextField
-                    type="textarea"
-                    multiline
-                    rows="3"
-                    id="standard-basic"
-                    label="Type the question"
-                    value={instructions}
-                    onChange={(e) => setInstructions(e.target.value)}
-                    color="primary"
-                    variant="outlined"
-                  />
-                </FormControl>
-
-                <FormControl fullWidth className={classes.messageNumberInput}>
-                  <TextField
                     type="text"
                     id="outlined-name"
-                    label="Option A"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    label="Enter phone number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     color="primary"
                     variant="outlined"
                   />
                 </FormControl>
-
-                <FormControl fullWidth className={classes.messageNumberInput}>
-                  <TextField
-                    type="text"
-                    id="outlined-name"
-                    label="Option B"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    color="primary"
-                    variant="outlined"
-                  />
-                </FormControl>
-
-                <FormControl fullWidth className={classes.messageNumberInput}>
-                  <TextField
-                    type="text"
-                    id="outlined-name"
-                    label="Option C"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    color="primary"
-                    variant="outlined"
-                  />
-                </FormControl>
-
-                <FormControl fullWidth className={classes.messageNumberInput}>
-                  <TextField
-                    type="text"
-                    id="outlined-name"
-                    label="Option D"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    color="primary"
-                    variant="outlined"
-                  />
-                </FormControl>
-
-                {false ? (
-                  <Loader
-                    type="Puff"
-                    color="#e3e2e1"
-                    height={100}
-                    width={100}
-                    timeout={3000} //3 secs
-                  />
+              </div>
+              <div>
+                <div className={classes.arrowContainer}>
+                  {/* <ArrowDownwardIcon fontSize="medium" /> */}
+                </div>
+                {startingQuiz ? (
+                  <div className={classes.loaderContainer}>
+                    <Loader
+                      type="Puff"
+                      color="#e3e2e1"
+                      height={100}
+                      width={100}
+                    />
+                  </div>
                 ) : (
                   <Button
                     variant="outlined"
-                    className={classes.addQuestionButton}
+                    className={classes.button}
                     type="submit"
                   >
-                    Add Question
+                    Start Quiz
                   </Button>
                 )}
-              </form>
-            </div>
-          </StyleRoot>
-        ) : null}
-
-        <Button
-          variant="outlined"
-          className={classes.addQuestionButton}
-          type="submit"
-        >
-          Publish Quiz
-        </Button>
+              </div>
+            </>
+          )}
+        </form>
 
         <Footer />
       </Container>
