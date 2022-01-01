@@ -1,0 +1,30 @@
+{
+  "name": "express-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-development": "NODE_ENV=development nodemon index.js",
+    "start-production": "NODE_ENV=production nodemon index.js",
+    "start-development-windows": "SET NODE_ENV=development& nodemon index.js",
+    "start-production-windows": "SET NODE_ENV=production& nodemon index.js",
+    "start": "NODE_ENV=production node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "domino": "^2.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.3",
+    "morgan": "^1.9.1",
+    "nanoid": "^3.1.22",
+    "node-fetch": "^2.6.1",
+    "page-metadata-parser": "^1.1.4",
+    "slugify": "^1.6.2"
+  }
+}
