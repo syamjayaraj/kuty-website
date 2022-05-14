@@ -100,10 +100,10 @@ let getUrl = (req) => {
         shortenedUrl: req.body.shortenedUrl,
       });
       if (url) {
-        let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        let ip = req.ip;
         if (ip) {
           let geo = geoip.lookup(ip);
-          console.log(geo, ip, "geo, ip");
+          console.log(geo, req.ip, "geo, ip");
           if (geo) {
             let click = new models.Click();
             click.country = geo.country;

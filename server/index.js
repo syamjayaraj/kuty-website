@@ -32,6 +32,7 @@ mongoose.connect(dbUrl, options, (err) => {
 });
 app.use(logger("dev"));
 app.use(cors());
+app.set("trust proxy", true);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/url", url);
