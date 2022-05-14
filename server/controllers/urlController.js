@@ -3,7 +3,6 @@ let models = require("../model");
 const { getMetadata } = require("page-metadata-parser");
 const domino = require("domino");
 const fetch = require("node-fetch");
-var requestIp = require("request-ip");
 const geoip = require("geoip-lite");
 
 let shortenUrl = (req) => {
@@ -101,7 +100,7 @@ let getUrl = (req) => {
         shortenedUrl: req.body.shortenedUrl,
       });
       if (url) {
-        const ip = requestIp;
+        const ip = req.clientIp;
         if (ip) {
           let geo = geoip.lookup(ip);
           console.log(geo, ip, "geo, ip");
