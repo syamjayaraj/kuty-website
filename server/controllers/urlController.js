@@ -99,11 +99,11 @@ let getUrl = (req) => {
       let url = await models.Url.findOne({
         shortenedUrl: req.body.shortenedUrl,
       });
-      console.log(url, "url");
       if (url) {
         let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
         if (ip) {
           let geo = geoip.lookup(ip);
+          console.log(geo, ip, "geo, ip");
           if (geo) {
             let click = new models.Click();
             click.country = geo.country;
