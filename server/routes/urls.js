@@ -4,6 +4,8 @@ let {
   shortenUrl,
   shortenUrlWhatsapp,
   getUrl,
+  getStats,
+  getShortUrls,
 } = require("../controllers/urlController");
 
 router.post("/shorten", async (req, res) => {
@@ -32,10 +34,33 @@ router.post("/shorten/whatsapp", async (req, res) => {
   }
 });
 
-router.get("/:shortenedUrl", async (req, res) => {
+router.post("/get-url", async (req, res) => {
   try {
     let response = await getUrl(req);
-    console.log(response);
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: err.message,
+    });
+  }
+});
+
+router.post("/stats", async (req, res) => {
+  try {
+    let response = await getStats(req);
+    res.status(200).json(response);
+  } catch (err) {
+    res.status(400).json({
+      status: 400,
+      message: err.message,
+    });
+  }
+});
+
+router.post("/get-short-urls", async (req, res) => {
+  try {
+    let response = await getShortUrls(req);
     res.status(200).json(response);
   } catch (err) {
     res.status(400).json({

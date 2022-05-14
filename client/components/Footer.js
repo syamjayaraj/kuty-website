@@ -19,6 +19,13 @@ function Footer() {
             <a>Blog</a>
           </Link>
         </Typography>
+        <div className={classes.downloadApp}>
+          Download Kuty.me mobile app for FREE
+          <div className={classes.storeIcons}>
+            <img src="/assets/icons/play-store.png" className={classes.icon} />
+            <img src="/assets/icons/app-store.png" className={classes.icon} />
+          </div>
+        </div>
       </Container>
     </footer>
   );

@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 import Loader from "react-loader-spinner";
 import Typography from "@material-ui/core/Typography";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import HeadComponent from "../components/urlShortener/url/HeadComponent";
+import HeadComponent from "../../components/urlShortener/url/HeadComponent";
 
 function Page(props) {
-  const router = useRouter();
-
   let urlData =
-    props.apiResponse &&
-    props.apiResponse.data &&
-    props.apiResponse.data.metaData;
+    props?.apiResponse &&
+    props?.apiResponse?.data &&
+    props?.apiResponse?.data?.metaData;
 
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (props.apiResponse) {
+    if (props?.apiResponse) {
       setLoading(false);
-      if (props.apiResponse.status === 200 && props.apiResponse.data) {
-        window.location.replace(props.apiResponse.data.url);
+      if (props?.apiResponse?.status === 200 && props?.apiResponse?.data) {
+        window.location.replace(props?.apiResponse?.data?.url);
       } else {
-        setMessage(props.apiResponse.message);
+        setMessage(props?.apiResponse.message);
       }
     }
-  }, [props.apiResponse.urlData]);
+  }, [props?.apiResponse.urlData]);
 
   return (
     <div
@@ -55,12 +51,15 @@ function Page(props) {
 }
 
 export async function getServerSideProps(context) {
-  let url = `${apiUrl}/url/${context.query.url}`;
+  let url = `${apiUrl}/url/get-url`;
   let requestOptions = {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      shortenedUrl: context.query.url,
+    }),
   };
 
   const res = await fetch(url, requestOptions);

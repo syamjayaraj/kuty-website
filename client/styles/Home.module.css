@@ -90,6 +90,28 @@
 .footer p {
   font-size: 0.9em;
 }
+.footer .downloadApp {
+  /* position: fixed; */
+  bottom: 0;
+  background: whitesmoke;
+  width: 100%;
+  padding: .5rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+}
+
+.footer .downloadApp .storeIcons {
+ display: flex;
+ justify-content: center;
+ margin-top: .5rem;
+}
+
+.footer .downloadApp .storeIcons .icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
+}
 
 .messageNumberInput,
 .mobileNumberInput {
@@ -128,6 +150,31 @@
 .loaderContainer {
   display: flex;
   justify-content: center;
+}
+.url {
+  font-size: .5em;
+  color: rgba(0, 0, 0, 0.54)
+}
+.url a {
+  color: rgb(35, 35, 35);
+}
+
+
+
+.lightBlock {
+  font-size: 0.9em;
+  text-align: left;
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  background: whitesmoke;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+.boldNumber {
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 600px) {

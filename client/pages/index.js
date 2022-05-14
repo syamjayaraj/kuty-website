@@ -182,7 +182,7 @@ export default function Home(props) {
                         aria-label="toggle password visibility"
                         onClick={() => copyShortenedUrl(shortenedUrl)}
                       >
-                        {copyButtonClicked ? "Copied" : <FileCopy />}
+                        {copyButtonClicked ? "Copied" : "Copy"}
                       </IconButton>
                     </InputAdornment>
                   }

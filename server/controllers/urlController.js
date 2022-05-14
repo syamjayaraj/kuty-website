@@ -3,6 +3,7 @@ let models = require("../model");
 const { getMetadata } = require("page-metadata-parser");
 const domino = require("domino");
 const fetch = require("node-fetch");
+const geoip = require("geoip-lite");
 
 let shortenUrl = (req) => {
   return new Promise(async (resolve, reject) => {
@@ -31,6 +32,13 @@ let shortenUrl = (req) => {
         url.metaData = metadata;
         url.shortenedUrl = await createRandomString();
         url = await url.save();
+
+        // Create stats
+        let stat = new models.Stat();
+        stat.url = url._id;
+        stat.shortenedUrl = url.shortenedUrl;
+        stat = await stat.save();
+
         resolve({
           status: 200,
           data: url,
@@ -67,6 +75,13 @@ let shortenUrlWhatsapp = (req) => {
         url.url = whatsappUrl;
         url.shortenedUrl = await createRandomString();
         url = await url.save();
+
+        // Create stats
+        let stat = new models.Stat();
+        stat.url = url._id;
+        stat.shortenedUrl = url.shortenedUrl;
+        stat = await stat.save();
+
         resolve({
           status: 200,
           data: url,
@@ -81,11 +96,48 @@ let shortenUrlWhatsapp = (req) => {
 let getUrl = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(req.params);
       let url = await models.Url.findOne({
-        shortenedUrl: req.params.shortenedUrl,
+        shortenedUrl: req.body.shortenedUrl,
       });
+
       if (url) {
+        let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+        if (ip) {
+          if (ip !== "::ffff:127.0.0.1") {
+            let geo = geoip.lookup(ip);
+
+            let click = new models.Click();
+            click.country = geo.country;
+            click.region = geo.region;
+            click.timezone = geo.timezone;
+            click.city = geo.city;
+            click.location = {
+              type: "Point",
+              coordinates: [click.location[1], click.location[0]],
+            };
+            click = await click.save();
+
+            let stat = await models.Stat.findOne({
+              url: url._id,
+            });
+            if (stat) {
+              stat.totalClicks = stat.totalClicks + 1;
+              stat.clicks.push(click._id);
+              stat.markModified("clicks");
+              stat = await stat.save();
+            } else {
+              let stat = new models.Stat();
+              stat.url = url._id;
+              stat.shortenedUrl = url.shortenedUrl;
+              stat.totalClicks = stat.totalClicks + 1;
+              stat.clicks.push(click._id);
+              stat.markModified("clicks");
+              stat = await stat.save();
+            }
+          }
+        }
+
         resolve({
           status: 200,
           data: url,
@@ -102,8 +154,56 @@ let getUrl = (req) => {
   });
 };
 
+let getStats = (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let stat = await models.Stat.findOne({
+        shortenedUrl: req.body.shortenedUrl,
+      }).populate("url");
+      if (stat) {
+        resolve({
+          status: 200,
+          data: stat,
+        });
+      } else {
+        resolve({
+          status: 200,
+          message: "Stat does not exist",
+        });
+      }
+    } catch (err) {
+      reject({ status: 200, message: err.message });
+    }
+  });
+};
+
+let getShortUrls = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let urls = await models.Url.find({
+        isListed: true,
+      }).select("shortenedUrl");
+      if (urls) {
+        resolve({
+          status: 200,
+          data: urls,
+        });
+      } else {
+        resolve({
+          status: 200,
+          message: "Stat does not exist",
+        });
+      }
+    } catch (err) {
+      reject({ status: 200, message: err.message });
+    }
+  });
+};
+
 module.exports = {
   shortenUrl,
   shortenUrlWhatsapp,
   getUrl,
+  getStats,
+  getShortUrls,
 };
