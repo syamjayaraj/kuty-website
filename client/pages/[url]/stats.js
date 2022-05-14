@@ -1,43 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Container,
-  TextField,
-  FormControl,
-  Button,
-  InputAdornment,
-  InputLabel,
-  Input,
-  IconButton,
-  FormHelperText,
   Typography,
-  Grid,
   List,
   ListItem,
   ListItemText,
-  CommentIcon,
   ListItemAvatar,
-  Avatar,
   Divider,
   Card,
   CardContent,
 } from "@material-ui/core";
 
-import isURL from "validator/lib/isURL";
-
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { apiUrl, siteUrl } from "../../config";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Loader from "react-loader-spinner";
-import { fadeInDown } from "react-animations";
-import Radium from "radium";
 import classes from "../../styles/Home.module.css";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import HeadComponent from "../../components/urlShortener/HeadComponent";
 
 export default function Home(props) {
-  console.log(props, "props");
-
   return (
     <div className={classes.root}>
       <HeadComponent />
