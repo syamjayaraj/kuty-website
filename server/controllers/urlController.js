@@ -99,14 +99,12 @@ let getUrl = (req) => {
       let url = await models.Url.findOne({
         shortenedUrl: req.body.shortenedUrl,
       });
-
+      console.log(url, "url");
       if (url) {
         let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-
         if (ip) {
-          if (ip !== "::ffff:127.0.0.1") {
-            let geo = geoip.lookup(ip);
-
+          let geo = geoip.lookup(ip);
+          if (geo) {
             let click = new models.Click();
             click.country = geo.country;
             click.region = geo.region;
@@ -114,7 +112,7 @@ let getUrl = (req) => {
             click.city = geo.city;
             click.location = {
               type: "Point",
-              coordinates: [click.location[1], click.location[0]],
+              coordinates: [geo?.location[1], geo?.location[0]],
             };
             click = await click.save();
 
@@ -133,6 +131,20 @@ let getUrl = (req) => {
               stat.totalClicks = stat.totalClicks + 1;
               stat.clicks.push(click._id);
               stat.markModified("clicks");
+              stat = await stat.save();
+            }
+          } else {
+            let stat = await models.Stat.findOne({
+              url: url._id,
+            });
+            if (stat) {
+              stat.totalClicks = stat.totalClicks + 1;
+              stat = await stat.save();
+            } else {
+              let stat = new models.Stat();
+              stat.url = url._id;
+              stat.shortenedUrl = url.shortenedUrl;
+              stat.totalClicks = stat.totalClicks + 1;
               stat = await stat.save();
             }
           }

@@ -65,6 +65,8 @@ export async function getServerSideProps(context) {
   const res = await fetch(url, requestOptions);
   const resJson = await res.json();
 
+  console.log(resJson, "jsn");
+
   return {
     props: {
       apiResponse: resJson,
