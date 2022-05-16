@@ -100,7 +100,7 @@ let getUrl = (req) => {
         shortenedUrl: req.body.shortenedUrl,
       });
       if (url) {
-        const ip = req.clientIp;
+        const ip = req.ip;
         if (ip) {
           let geo = geoip.lookup(ip);
           console.log(geo, ip, "geo, ip");
