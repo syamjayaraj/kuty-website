@@ -17,7 +17,7 @@ function Page(props) {
     if (props?.apiResponse) {
       setLoading(false);
       if (props?.apiResponse?.status === 200 && props?.apiResponse?.data) {
-        // window.location.replace(props?.apiResponse?.data?.url);
+        window.location.replace(props?.apiResponse?.data?.url);
       } else {
         setMessage(props?.apiResponse.message);
       }
