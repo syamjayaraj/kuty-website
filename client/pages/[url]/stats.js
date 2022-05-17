@@ -169,7 +169,7 @@ export default function Home(props) {
                     <ListItem alignItems="flex-start">
                       <ListItemAvatar>Location</ListItemAvatar>
                       <ListItemText
-                        primary={`https://www.latlong.net/c/?lat=${item?.location[1]}&long=${item?.location[0]}`}
+                        primary={`https://www.latlong.net/c/?lat=${item?.location?.coordinates[1]}&long=${item?.location?.coordinates[0]}`}
                         secondary={
                           <React.Fragment>
                             <Typography
