@@ -101,7 +101,7 @@ let getUrl = (req) => {
       });
       console.log(url, "URL");
       if (url) {
-        let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+        let ip = request.socket.remoteAddress;
         ip = ip.toString().replace("::ffff:", "");
         if (ip) {
           let geo = geoip.lookup(ip);
