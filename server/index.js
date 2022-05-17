@@ -34,7 +34,6 @@ app.use(logger("dev"));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.set("trust proxy", true);
 app.use("/url", url);
 app.use("/quiz", quiz);
 app.use("/entry", entry);

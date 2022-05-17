@@ -13,8 +13,6 @@ function Page(props) {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
-  console.log(props?.apiResponse, "api");
-
   useEffect(() => {
     if (props?.apiResponse) {
       setLoading(false);
@@ -53,6 +51,11 @@ function Page(props) {
 }
 
 export async function getServerSideProps(context) {
+  const forwarded = context?.req?.headers["x-forwarded-for"];
+  const ip = forwarded
+    ? forwarded.split(/, /)[0]
+    : context?.req?.connection?.remoteAddress;
+
   let url = `${apiUrl}/url/get-url`;
   let requestOptions = {
     method: "POST",
@@ -61,6 +64,7 @@ export async function getServerSideProps(context) {
     },
     body: JSON.stringify({
       shortenedUrl: context.query.url,
+      ip: ip,
     }),
   };
 
