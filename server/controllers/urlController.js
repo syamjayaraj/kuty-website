@@ -3,7 +3,7 @@ let models = require("../model");
 const { getMetadata } = require("page-metadata-parser");
 const domino = require("domino");
 const fetch = require("node-fetch");
-const geoip = require("geoip-lite");
+const geoip = require("fast-geoip");
 
 let shortenUrl = (req) => {
   return new Promise(async (resolve, reject) => {
