@@ -13,6 +13,8 @@ function Page(props) {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
 
+  console.log(props?.apiResponse, "api");
+
   useEffect(() => {
     if (props?.apiResponse) {
       setLoading(false);
@@ -22,7 +24,7 @@ function Page(props) {
         setMessage(props?.apiResponse.message);
       }
     }
-  }, [props?.apiResponse.urlData]);
+  }, [props?.apiResponse]);
 
   return (
     <div

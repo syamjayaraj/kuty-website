@@ -35,8 +35,8 @@ export default function Home(props) {
             className={classes.url}
           >
             Original URL:{" "}
-            <a href={siteUrl + "/" + props?.apiResponse?.data?.url?.url}>
-              {siteUrl + "/" + props?.apiResponse?.data?.url?.url}
+            <a href={props?.apiResponse?.data?.url?.url}>
+              {props?.apiResponse?.data?.url?.url}
             </a>
           </Typography>
 

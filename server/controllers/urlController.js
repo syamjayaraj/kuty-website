@@ -4,6 +4,7 @@ const { getMetadata } = require("page-metadata-parser");
 const domino = require("domino");
 const fetch = require("node-fetch");
 const geoip = require("geoip-lite");
+const { getClientIp } = require("../lib/getClientIp");
 
 let shortenUrl = (req) => {
   return new Promise(async (resolve, reject) => {
@@ -99,8 +100,9 @@ let getUrl = (req) => {
       let url = await models.Url.findOne({
         shortenedUrl: req.body.shortenedUrl,
       });
+      console.log(url, "URL");
       if (url) {
-        const ip = req.ip;
+        const ip = getClientIp(req);
         if (ip) {
           let geo = geoip.lookup(ip);
           console.log(geo, ip, "geo, ip");
