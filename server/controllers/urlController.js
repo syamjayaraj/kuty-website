@@ -101,7 +101,7 @@ let getUrl = (req) => {
       });
       console.log(url, "URL");
       if (url) {
-        let ip = request.socket.remoteAddress;
+        let ip = req.socket.remoteAddress;
         ip = ip.toString().replace("::ffff:", "");
         if (ip) {
           let geo = geoip.lookup(ip);
