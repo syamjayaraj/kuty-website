@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemAvatar,
   Divider,
   Card,
   CardContent,
@@ -17,6 +16,7 @@ import classes from "../../styles/Home.module.css";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import HeadComponent from "../../components/urlShortener/HeadComponent";
+import moment from "moment";
 
 export default function Home(props) {
   return (
@@ -65,11 +65,11 @@ export default function Home(props) {
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
           <ListItem alignItems="flex-start">
-            <ListItemAvatar>
+            <ListItemText>
               <div className={classes.boldNumber}>
                 {props?.apiResponse?.data?.totalClicks}
               </div>
-            </ListItemAvatar>
+            </ListItemText>
             <ListItemText
               primary="Clicks"
               secondary={
@@ -94,14 +94,20 @@ export default function Home(props) {
             <Typography variant="h6" component="h6" style={{ margin: "1rem" }}>
               CLICK DETAILS
             </Typography>
-            {props?.apiResponse?.data?.clicks.map((item) => {
+            {props?.apiResponse?.data?.clicks.map((item, index) => {
               return (
-                <Card sx={{ minWidth: 275 }}>
+                <Card
+                  sx={{ minWidth: 275 }}
+                  key={"click-" + index}
+                  style={{
+                    margin: "2rem 1rem",
+                  }}
+                >
                   <CardContent>
                     <ListItem alignItems="flex-start">
-                      <ListItemAvatar>Country</ListItemAvatar>
+                      <ListItemText>Country</ListItemText>
                       <ListItemText
-                        primary={item.country}
+                        primary={item?.country}
                         secondary={
                           <React.Fragment>
                             <Typography
@@ -116,9 +122,9 @@ export default function Home(props) {
                     </ListItem>
 
                     <ListItem alignItems="flex-start">
-                      <ListItemAvatar>Region</ListItemAvatar>
+                      <ListItemText>Region</ListItemText>
                       <ListItemText
-                        primary={item.region}
+                        primary={item?.region}
                         secondary={
                           <React.Fragment>
                             <Typography
@@ -133,9 +139,9 @@ export default function Home(props) {
                     </ListItem>
 
                     <ListItem alignItems="flex-start">
-                      <ListItemAvatar>City</ListItemAvatar>
+                      <ListItemText>City</ListItemText>
                       <ListItemText
-                        primary={item.city}
+                        primary={item?.city}
                         secondary={
                           <React.Fragment>
                             <Typography
@@ -150,9 +156,9 @@ export default function Home(props) {
                     </ListItem>
 
                     <ListItem alignItems="flex-start">
-                      <ListItemAvatar>Timezone</ListItemAvatar>
+                      <ListItemText>Timezone</ListItemText>
                       <ListItemText
-                        primary={item.timezone}
+                        primary={item?.timezone}
                         secondary={
                           <React.Fragment>
                             <Typography
@@ -167,21 +173,31 @@ export default function Home(props) {
                     </ListItem>
 
                     <ListItem alignItems="flex-start">
-                      <ListItemAvatar>Location</ListItemAvatar>
-                      <ListItemText
-                        primary={`https://www.latlong.net/c/?lat=${item?.location?.coordinates[1]}&long=${item?.location?.coordinates[0]}`}
-                        secondary={
-                          <React.Fragment>
-                            <Typography
-                              sx={{ display: "inline" }}
-                              component="span"
-                              variant="body2"
-                              color="text.primary"
-                            ></Typography>
-                          </React.Fragment>
-                        }
-                      />
+                      <ListItemText>Location</ListItemText>
+                      <a
+                        href={`https://www.latlong.net/c/?lat=${item?.location?.coordinates[1]}&long=${item?.location?.coordinates[0]}`}
+                      >
+                        <ListItemText
+                          primary={`https://www.latlong.net/c/?lat=${item?.location?.coordinates[1]}&long=${item?.location?.coordinates[0]}`}
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                sx={{ display: "inline" }}
+                                component="span"
+                                variant="body2"
+                                color="text.primary"
+                              ></Typography>
+                            </React.Fragment>
+                          }
+                        />
+                      </a>
                     </ListItem>
+
+                    <Typography variant="subtitle2" component="subtitle2">
+                      {moment(item?.createdAt).format(
+                        "MMMM Do YYYY, h:mm:ss A"
+                      )}
+                    </Typography>
                   </CardContent>
                 </Card>
               );
@@ -231,7 +247,7 @@ export async function getStaticPaths() {
   const resJson = await res.json();
   if (resJson.status === 200) {
     const paths = resJson?.data?.map((item) => ({
-      params: { url: item.shortenedUrl },
+      params: { url: item?.shortenedUrl },
     }));
 
     return {

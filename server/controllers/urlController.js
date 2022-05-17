@@ -171,7 +171,9 @@ let getStats = (req) => {
     try {
       let stat = await models.Stat.findOne({
         shortenedUrl: req.body.shortenedUrl,
-      }).populate("url");
+      })
+        .populate("url")
+        .populate("clicks");
       if (stat) {
         resolve({
           status: 200,
