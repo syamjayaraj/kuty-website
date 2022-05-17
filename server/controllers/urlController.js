@@ -4,7 +4,6 @@ const { getMetadata } = require("page-metadata-parser");
 const domino = require("domino");
 const fetch = require("node-fetch");
 const geoip = require("geoip-lite");
-const { getClientIp } = require("../lib/getClientIp");
 
 let shortenUrl = (req) => {
   return new Promise(async (resolve, reject) => {
@@ -102,7 +101,8 @@ let getUrl = (req) => {
       });
       console.log(url, "URL");
       if (url) {
-        const ip = getClientIp(req);
+        let ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+        ip = ip.toString().replace("::ffff:", "");
         if (ip) {
           let geo = geoip.lookup(ip);
           console.log(geo, ip, "geo, ip");
@@ -163,6 +163,7 @@ let getUrl = (req) => {
         });
       }
     } catch (err) {
+      console.log(err, "error");
       reject({ status: 200, message: err.message });
     }
   });
