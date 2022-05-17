@@ -99,12 +99,10 @@ let getUrl = (req) => {
       let url = await models.Url.findOne({
         shortenedUrl: req.body.shortenedUrl,
       });
-      console.log(url, "URL");
       if (url) {
         let ip = req?.body?.ip;
         if (ip) {
-          let geo = geoip.lookup(ip);
-          console.log(geo, ip, "geo, ip");
+          let geo = await geoip.lookup(ip);
           if (geo) {
             let click = new models.Click();
             click.country = geo.country;
@@ -113,7 +111,7 @@ let getUrl = (req) => {
             click.city = geo.city;
             click.location = {
               type: "Point",
-              coordinates: [geo?.location[1], geo?.location[0]],
+              coordinates: [geo?.ll[1], geo?.ll[0]],
             };
             click = await click.save();
 

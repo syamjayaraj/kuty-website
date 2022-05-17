@@ -11,6 +11,8 @@
     "@sweetalert/with-react": "^0.1.1",
     "classnames": "2.3.1",
     "date-fns": "2.22.1",
+    "fast-geoip": "^1.1.72",
+    "geoip-lite": "^1.4.5",
     "moment": "^2.29.1",
     "next": "latest",
     "radium": "^0.26.1",

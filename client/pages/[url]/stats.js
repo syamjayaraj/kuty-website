@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
 } from "@material-ui/core";
-
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { apiUrl, siteUrl } from "../../config";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -230,7 +229,6 @@ export async function getStaticPaths() {
 
   const res = await fetch(url, requestOptions);
   const resJson = await res.json();
-  console.log(resJson, "lorem");
   if (resJson.status === 200) {
     const paths = resJson?.data?.map((item) => ({
       params: { url: item.shortenedUrl },

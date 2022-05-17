@@ -57,7 +57,6 @@ let startQuiz = async (name, phoneNumber, quiz, entryToken) => {
 let submitAnswer = async (entryId, quiz, question, answer, token) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(quiz, question, answer, token, "hello");
       let url = `${apiUrl}/entry/${entryId}`;
       let requestOptions = {
         method: "PUT",

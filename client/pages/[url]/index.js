@@ -17,7 +17,7 @@ function Page(props) {
     if (props?.apiResponse) {
       setLoading(false);
       if (props?.apiResponse?.status === 200 && props?.apiResponse?.data) {
-        window.location.replace(props?.apiResponse?.data?.url);
+        // window.location.replace(props?.apiResponse?.data?.url);
       } else {
         setMessage(props?.apiResponse.message);
       }
@@ -55,7 +55,6 @@ export async function getServerSideProps(context) {
   const ip = forwarded
     ? forwarded.split(/, /)[0]
     : context?.req?.connection?.remoteAddress;
-
   let url = `${apiUrl}/url/get-url`;
   let requestOptions = {
     method: "POST",
@@ -70,9 +69,6 @@ export async function getServerSideProps(context) {
 
   const res = await fetch(url, requestOptions);
   const resJson = await res.json();
-
-  console.log(resJson, "jsn");
-
   return {
     props: {
       apiResponse: resJson,
