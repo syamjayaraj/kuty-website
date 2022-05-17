@@ -40,7 +40,7 @@ app.use("/quiz", quiz);
 app.use("/entry", entry);
 app.use("/question", question);
 
-app.listen(port, function () {
+app.listen(port, "0.0.0.0", function () {
   console.log("Runnning on " + port);
 });
 module.exports = app;
