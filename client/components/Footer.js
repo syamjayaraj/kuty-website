@@ -10,7 +10,7 @@ function Footer() {
           Made with Love in God's own country
         </Typography>
         <Typography variant="body1">
-          Copyright © <a href="https://floyet.com">Floyet</a> 2020 |&nbsp;
+          Copyright © <a href="https://floyet.com">Floyet</a> 2024 |&nbsp;
           <Link href="/about">
             <a>About</a>
           </Link>
@@ -19,13 +19,13 @@ function Footer() {
             <a>Blog</a>
           </Link>
         </Typography>
-        <div className={classes.downloadApp}>
+        {/* <div className={classes.downloadApp}>
           Download Kuty.me mobile app for FREE
           <div className={classes.storeIcons}>
             <img src="/assets/icons/play-store.png" className={classes.icon} />
             <img src="/assets/icons/app-store.png" className={classes.icon} />
           </div>
-        </div>
+        </div> */}
       </Container>
     </footer>
   );
