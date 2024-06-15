@@ -9,20 +9,15 @@ import {
   Input,
   IconButton,
   FormHelperText,
-  Typography,
-  Grid,
 } from "@material-ui/core";
 
-import { FileCopy } from "@material-ui/icons";
 import isURL from "validator/lib/isURL";
 
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import { apiUrl, siteUrl } from "../config";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { fadeInDown } from "react-animations";
 import Radium, { StyleRoot } from "radium";
-import Head from "next/head";
 import classes from "../styles/Home.module.css";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -66,7 +61,6 @@ export default function Home(props) {
         .then((res) => {
           if (res.data) {
             setShortenedUrl(res.data.shortenedUrl);
-            // copyShortenedUrl(res.data.shortenedUrl);
           } else {
             setMessage({
               title: "Unable to shorten that link. It is not a valid url.",

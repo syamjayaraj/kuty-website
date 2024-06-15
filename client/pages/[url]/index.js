@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { apiUrl } from "../../config";
 import Loader from "react-loader-spinner";
 import Typography from "@material-ui/core/Typography";
 import HeadComponent from "../../components/urlShortener/url/HeadComponent";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 function Page(props) {
   let urlData =

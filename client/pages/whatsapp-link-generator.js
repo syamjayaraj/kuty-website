@@ -115,6 +115,7 @@ export default function Home(props) {
     setMobileNumberToGenerateLink(url);
   };
 
+
   return (
     <div className={classes.root}>
       <HeadComponent />
@@ -139,7 +140,7 @@ export default function Home(props) {
               onChange={(e) => validateAndSetUrlToShorten(e.target.value)}
               color="primary"
               autoFocus={true}
-              variant="outlined"
+              variant="outlined"              
             />
           </FormControl>
 

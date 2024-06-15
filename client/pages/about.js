@@ -21,7 +21,7 @@ export default function About() {
 <h2>The simplest URL shortener</h2>
 <p>The human brain is designed to attract simple things. Long and messy URLs are always annoying. <a href="https://kuty.me/" target="_blank" rel="noreferrer noopener">Kuty.me</a> will help you to shorten long and messy URLs.</p>
 <p>Here is a long and messy URL.</p>
-<pre class="wp-block-preformatted"><a href="https://www.techomoro.com/create-a-dropdown-in-react-that-closes-when-click-outside/" target="_blank" rel="noreferrer noopener">https://www.techomoro.com/create-a-dropdown-in-react-that-closes-when-click-outside/</a></pre>
+<pre class="wp-block-preformatted"><a href="https://codeariv.com/create-a-dropdown-in-react-that-closes-when-click-outside/" target="_blank" rel="noreferrer noopener">https://codeariv.com/create-a-dropdown-in-react-that-closes-when-click-outside/</a></pre>
 <p>Copy this URL, paste in <a href="https://kuty.me/" target="_blank" rel="noreferrer noopener">Kuty.me</a> and press the <strong>Shorten</strong> button. It will generate a short link. You can copy this short URL and share it anywhere.</p>
 <p>After shortening it using <a href="https://kuty.me/" target="_blank" rel="noreferrer noopener">Kuty.me</a>, it will be like the one below.</p>
 <pre class="wp-block-preformatted"><a href="https://kuty.me/9jl" target="_blank" rel="noreferrer noopener">https://kuty.me/9jl</a></pre>

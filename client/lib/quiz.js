@@ -1,5 +1,4 @@
-import { apiUrl } from "../config";
-
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 let getQuiz = async (slug, token) => {
   return new Promise(async (resolve, reject) => {
     try {

@@ -34,7 +34,7 @@ function Header() {
               Whatsapp Link Generator
             </a>
           </Link>
-          <Link href="/quiz-maker">
+          {/* <Link href="/quiz-maker">
             <a
               className={classes.dropdownItem}
               style={
@@ -43,7 +43,7 @@ function Header() {
             >
               Quiz Maker
             </a>
-          </Link>
+          </Link> */}
         </div>
         <div className={classes.mobileMenu}>
           <DropdownLink />
